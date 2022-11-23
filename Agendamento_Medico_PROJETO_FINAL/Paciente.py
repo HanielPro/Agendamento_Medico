@@ -10,34 +10,34 @@ class Paciente:
      # Não poderá existir pacientes com o mesmo CPF.
      # Deverá ser uma propriedade inalterável. 
     }
-
+    
     #Nome= String sem restrição {O nome do Paciente em questão}
     
-    #EspecialistaDesejado= String, sem restrição{
-        Ela é responsável por ditar com qual  Médico o Paciente deverá interagir{
-            EX: Paciente que busca um Oftamologísta, deve ser atendido por um Medico com especialidade em Oftalmologia             
+    #especialidadeDesejadaDesejado= String, sem restrição{
+        Ela é responsável por ditar para qual fila de espera o Paciente deverá interagir{
+            EX: Paciente que busca por um Oftamologísta, deverá ser inserido na fila de Oftalmologia             
         }
-        O paciente pode desejar qualquer tipo de especialidade, mas o Hospital só poderá admitir uma consulta com  um Médico que contenha a tal especialidade.  
-        O Paciente só poderá desejar a consulta com um único especialista.
+        O paciente pode desejar qualquer tipo de especialidade, mas o consultório só poderá admitir a consulta com um Médico caso haja um médico com a tal especialidade.  
+        O Paciente só poderá desejar a consulta com um único especialidadeDesejada.
     }
-    
-    #tempoEstimadoConsultaMinutos= Int, só pode ser aceito, consultas de 1 minuto ou acima{
-            Ela é  a responsável por permitir que  um paciente  entrar ou não na lista de espera do Médico{
-            EX: Um Paciente que possui uma consulta de 70 minutos, e o médico só possui  1 minuto livre, o paciente poderá entrar na fila, pois o limite ainda não foi atingido.
-        }         
-    }
+    #Gradivade= String, deverá ser uma string condizente com a seguinte lista: ['L1','L2','M1','M2','G'].{
+        #As letras dentro da lista são respectivamente: Leve, Moderado e Gravíssimo, enquanto os números como os graus.
+        # A gravidade, pode ser considerado como a prioridade do paciente, onde o L1 é a mais baixa e G a mais alta.
+        # O paciente com a maior gravidade, deverá ser o mais prioritário na fila de espera das especialidades
+        }
     '''
+    
     '''
     #== == == == O Paciente deverá Fazer:
     #Ele Poderá alterar seus atributos quando quiser desde que as modificações estejam de acordo com as restrições dos atributos.
     '''
     
-    def __init__(self,cpf:str, nome:str,especialista:str, tempoEstimadoConsultaMinutos:int) -> None:
+    def __init__(self,cpf:str, nome:str, especialidadeDesejada:str, gravidade:str) -> None:
         self.__nome=nome
-        self.__especialista=especialista
+        self.__especialidadeDesejada=especialidadeDesejada
         
-        if tempoEstimadoConsultaMinutos<0: raise PacientException('INVALID ENTERED TIME')
-        self.__tempoEstimadoConsultaMinutos= tempoEstimadoConsultaMinutos
+        #if tempoEstimadoConsultaMinutos<0: raise PacientException('INVALID ENTERED TIME')
+        #self.__tempoEstimadoConsultaMinutos= tempoEstimadoConsultaMinutos
         
         try:self.__cpf= self.validarCPF(cpf)
         except: raise PacientException('INVALID CPF ASSIGNMENT')
@@ -51,17 +51,19 @@ class Paciente:
         self.__nome=nome
 
     @property
-    def especialista(self):
-        return self.__especialista
+    def especialidadeDesejada(self):
+        return self.__especialidadeDesejada
     
-    @especialista.setter
-    def especialista(self,especialista):
-        self.__especialista=especialista
+    @especialidadeDesejada.setter
+    def especialidadeDesejada(self,especialidadeDesejada):
+        self.__especialidadeDesejada=especialidadeDesejada
     
+    '''
     @property
     def tempoEstimadoConsultaMinutos(self):
         return self.__tempoEstimadoConsultaMinutos
 
+    
     @tempoEstimadoConsultaMinutos.setter
     def tempoEstimadoConsultaMinutos(self,tempoEstimado:int):
         try:
@@ -70,6 +72,7 @@ class Paciente:
 
         except:
             raise PacientException('INVALID ENTERED TIME')
+    '''
         
     #== == == Responsável por checar se o CPF é válido   
     def validarCPF(self,cpf:str):
@@ -95,5 +98,6 @@ class Paciente:
         return False # o caractere não era um número
              
     def __str__(self) -> str:
-        return f'Nome: {self.__nome}, CPF: {self.__cpf} Especialista desejado: {self.__especialista}, tempo estimadoda consulta em minutos: {self.__tempoEstimadoConsultaMinutos}'
+        #return f'Nome: {self.__nome}, CPF: {self.__cpf} especialidadeDesejada desejado: {self.__especialidadeDesejada}, tempo estimadoda consulta em minutos: {self.__tempoEstimadoConsultaMinutos}'
+        return f'Nome: {self.__nome}, CPF: {self.__cpf} especialidadeDesejada desejado: {self.__especialidadeDesejada}'
     
