@@ -1,8 +1,6 @@
-from Paciente import Paciente
-from Hospital import Hospital
-from filaEncadeadaNoCabeca import Fila, FilaException
-import time
 import random
+import time
+from Paciente import Paciente
 
 class MedicException(Exception):
     def __init__(self,msg) -> None:
