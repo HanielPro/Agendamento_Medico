@@ -8,14 +8,16 @@ O consultório será o servidor. Nele há diferentes especialidades médicas, es
 ## ABORDAGENS
 
 <ol> 
-    <li>**PIRC:** Estará envolvida na parte de comunicação entre o cliente com o servidor. O Cliente possui diferentes verbos:  ?: Enviar os dados de um paciente, ?: Excluir os dados de um paciente, ?: Atualizar os dados de Um paciente, ?: Pede os dados de um cliente e etc. _No Momemnto não possuimos um protocolo de aplicação expecífico em mente_. O servidor tratará os pedidos dos cliente, paralelamente, podendo retornar algum dado ou não.</li>
-    <li>**Estrutura de Dados:** Estará presente na parte do gerenciamento das excessões, seja no lado  do servidor ou na do cliente. utilizaremos POO para gerar os pacientes, os médicos, as especiealidades e o próprio consultório. Para a parte de  estrutura de dados, utilizaremos **duas**: 
+    <li> **PIRC:** Estará envolvida na parte de comunicação entre o cliente com o servidor. O Cliente possui diferentes verbos:  ?: Enviar os dados de um paciente, ?: Excluir os dados de um paciente, ?: Atualizar os dados de Um paciente, ?: Pede os dados de um cliente e etc. _No Momemnto não possuimos um protocolo de aplicação expecífico em mente_. O servidor tratará os pedidos dos cliente, paralelamente, podendo retornar algum dado ou não.</li>
+    <li> **Estrutura de Dados:** Estará presente na parte do gerenciamento das excessões, seja no lado do servidor ou na do cliente. utilizaremos POO para gerar os pacientes, os médicos, as especiealidades e o próprio consultório. Para a parte de  estrutura de dados, utilizaremos **duas**: 
         <ol>
-            <li><u>Lista Encadeada</u><ol>
+            <li>
+                <u>Lista Encadeada</u>
+                <ol>
                     <li>As especialidades médicas do consúltorio serão armazenadas</li>
                     <li>Cada especialidade deverá ter a sua própria fila de espera, onde o paciente será inserido a partir do valor da sua prioridade e também servirá para que os médicos possam saber qual o paciente que eles deveram consultar.</li>
                     <li>A lista servirá para armazenar os paciente que ainda não foram despachados para a clínica.</li>
-                <ol>
+                </ol>
             </li>
             <li><u>Árvore Binária de Busca</u>
                 <ol>
@@ -25,8 +27,7 @@ O consultório será o servidor. Nele há diferentes especialidades médicas, es
             </li>
         </ol>
     </li>
-    <li> **Sistemas Operacionais** <u>sistema de Threads</u>: No servidor, ele utilizará Threads para se comunicar com vários clientes simultâneamente, Os médicos, mos quais poderão consultar os pacientes sem necessitar esperar a realização de um comando. Possuimos diversas variáveis que devem ser protegidas, por isso a  exclusão mútua será crucial: nas comunicações em paralelo entre os clientes com o servidor, a fim de evitar que um cliente altere um paciente que está a ser modificado por um outro; na inserção de um paciente, para evitar que um paciente seja inserido depois que o processo for trocado no processador; quando um médico for consultar um paciente, para que não ocorra de um paciente acaba sendo consultando por mais dois médicos ao mesmo tempo.
-    </li>
+    <li> **Sistemas Operacionais** <u>sistema de Threads</u>: No servidor, ele utilizará Threads para se comunicar com vários clientes simultâneamente, Os médicos, mos quais poderão consultar os pacientes sem necessitar esperar a realização de um comando. Possuimos diversas variáveis que devem ser protegidas, por isso a  exclusão mútua será crucial: nas comunicações em paralelo entre os clientes com o servidor, a fim de evitar que um cliente altere um paciente que está a ser modificado por um outro; na inserção de um paciente, para evitar que um paciente seja inserido depois que o processo for trocado no processador; quando um médico for consultar um paciente, para que não ocorra de um paciente acaba sendo consultando por mais dois médicos ao mesmo tempo.</li>
 </ol>
 
 ## O que já Foi feito
