@@ -1,0 +1,2 @@
+class Estrutura:
+    pass
