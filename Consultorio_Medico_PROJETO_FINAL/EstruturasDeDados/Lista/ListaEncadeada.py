@@ -77,6 +77,7 @@ class Lista:
         NodePosition+=self.__busca(key,Node.prox) # Não achou, então vai para o próximo nó
         
         return NodePosition
+    
         
 #== == == == Método que Modificará o contéudo de um nó a partir de uma key exigida.
     def modificarNode(self, key:any, content: any)->None:
@@ -160,7 +161,7 @@ class Lista:
             raise ListaException(AE)
 
     def __remover(self,position:int,Node:Node)->Node:
-        
+    
         if position - 1 == 1: # ele deve parar um antes do que será removido    
             NodeToRemove=Node.prox
 
@@ -201,3 +202,4 @@ class Lista:
                 return True
         except ListaException:
             return False
+    
