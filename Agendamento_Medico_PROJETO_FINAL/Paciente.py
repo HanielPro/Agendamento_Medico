@@ -72,5 +72,5 @@ class Paciente:
              
     def __str__(self) -> str:
         #return f'Nome: {self.__nome}, CPF: {self.__cpf} especialidadeDesejada desejado: {self.__especialidadeDesejada}, tempo estimadoda consulta em minutos: {self.__tempoEstimadoConsultaMinutos}'
-        return f'{self.__cpf}|{self.__nome}|{self.__especialidadeDesejada}'
+        return f'Nome: {self.__nome}, CPF: {self.__cpf} especialidadeDesejada desejado: {self.__especialidadeDesejada}'
     

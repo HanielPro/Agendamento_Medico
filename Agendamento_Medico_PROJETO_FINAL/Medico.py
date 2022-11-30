@@ -8,13 +8,12 @@ class MedicException(Exception):
 
 class Medico:
     
-    def __init__(self,id,nome:str,especialidade:object,ConsultasIntervalo:int=15) -> None:
+    def __init__(self, nome:str,especialidade:object,ConsultasIntervalo:int=15) -> None:
         
         assert ConsultasIntervalo >= 30 and ConsultasIntervalo<=150 , MedicException('INVALID TIME FOR A EXAM')
         self.__nome=nome
         self.__especialidade=especialidade
         self.__ConsultasIntervalo=ConsultasIntervalo
-        self.__id=id
     
     @property
     def nome(self):
@@ -46,6 +45,9 @@ class Medico:
         except AssertionError:
             raise MedicException('INVALID ENTERED TIME')
 
+    def __str__(self) -> str:
+        return f'Nome: {self.__nome}, Especialidade: {self.__especialidade}, Limite de consultas: {self.__ConsultasIntervalo}'
+        #return f'Nome: {self.__nome}, Especialidade: {self.__especialidade}'
     
     def BuscarPaciente(self): #== == == O médico ficará esperando receber um paciente
         pass
@@ -59,4 +61,4 @@ class Medico:
              
     
     def __str__(self) -> str:
-        return f'|{self.__id}|{self.__nome}|{self.__especialidade}|{self.__ConsultasIntervalo}'
+        return f'Nome: {self.__nome}, especialidade: {self.__especialidade}, Tempo Limite para consulta: {self.__ConsultasIntervalo}'

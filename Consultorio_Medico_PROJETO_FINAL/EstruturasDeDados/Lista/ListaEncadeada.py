@@ -73,7 +73,6 @@ class Lista:
         
         elif key == Node.key: # Vê se o nó da vez possui a chave  
             return 1 # Ele achou!
-
         NodePosition+=self.__busca(key,Node.prox) # Não achou, então vai para o próximo nó
         
         return NodePosition

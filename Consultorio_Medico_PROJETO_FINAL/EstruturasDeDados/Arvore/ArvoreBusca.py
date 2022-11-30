@@ -1,5 +1,3 @@
-
-
 #== == == ==Criador da Exceções da Árvore binário
 class SearchArborException(Exception):
         #-- -- Codes Error
@@ -18,8 +16,9 @@ class NodeException(Exception):
 
 #== == == ==Aqui onde os nós são criados
 class Node:
-    def __init__(self,key:any, carga:any):
+    def __init__(self,id:int,key:any, carga:any):
         self.__key=key
+        self.id=id
         self.carga = carga
         self.esq = None
         self.dir = None
@@ -116,8 +115,8 @@ class ArvoreBusca:
         Não deverá ser permitido este caso: NewNodeKey == NodeKey      
     '''
     
-    def InserirNode(self,key:any,carga:any):
-        newNode=Node(key,carga)
+    def InserirNode(self,id:int,key:any,carga:any):
+        newNode=Node(id,key,carga)
         if self.__raiz==None:
             self.__raiz=newNode
             return
@@ -125,10 +124,10 @@ class ArvoreBusca:
 
     def __InserirNode(self,Node:Node,newNode:Node):
         
-        if newNode.key==Node.key: #== A key já foi usada na árvore:
+        if newNode.id==Node.id: #== A key já foi usada na árvore:
             raise NodeException(1,'AUTHENTICATION KEY ERROR')
         
-        elif newNode.key > Node.key: # caso a key do Nó seja maior que a key do Nó atual
+        elif newNode.id > Node.id: # caso a key do Nó seja maior que a key do Nó atual
             if Node.dir==None: # Não há sub-árvores a direita do nó
                 Node.dir=newNode
                 return # encerra a recursão
@@ -136,7 +135,7 @@ class ArvoreBusca:
             else: #Caso haja algum(uns) nó(s) a direita, terá a tentativa de inserir o nó lá
                 self.__InserirNode(Node.dir,newNode)
         
-        elif newNode.key < Node.key: # caso a key do Nó a ser criado seja menor que a key do Nó atual
+        elif newNode.id < Node.id: # caso a key do Nó a ser criado seja menor que a key do Nó atual
             if Node.esq==None: # Não há sub-árvores a esquerda do nó
                 Node.esq=newNode
             else:#Caso haja algum(uns) nó(s) a esquerda, terá a tentativa de inserir o nó lá
@@ -180,18 +179,7 @@ class ArvoreBusca:
             return self.__busca(key, node.esq)
     
     #== == == Método para remover Nós em uma árvore de busca
-    '''
-    Este método precisa ser corrigido
-     |||||||||||||||||||
-     |||||||||||||||||||
-     |||||||||||||||||||
-   \|||||||||||||||||||||/
-    \|||||||||||||||||||/
-      \|||||||||||||||/               
-         \||||||||||/
-           \||||||/
-             \||/
-    '''
+
     def removerNo(self,key:any)->Node:
         try:
             '''
@@ -202,14 +190,18 @@ class ArvoreBusca:
             # o 4º é o que precisa de mais atenção pois a raiz não pode ser removida com um método convencional.
             '''
             assert not(self.estaVazia())
-            if key == self.__raiz.key: # testa se é o 4° caso
+            if key == self.__raiz.id: # testa se é o 4° caso
                 nodeRemoved=self.__raiz
+                if nodeRemoved.esq == None and nodeRemoved.dir is None:
+                    self.__raiz=None
                 if nodeRemoved.esq != None and nodeRemoved.dir != None: # testa se há nós a esquerda e a direita da raiz.
                 
-                    NodeChanged=self.__changeNode(nodeRemoved.dir)
-                    NodeChanged.esq= nodeRemoved.esq
-                    NodeChanged.dir=nodeRemoved.dir
+                    NodeChanged=self.__the_smaller(nodeRemoved.dir)
+                    print(NodeChanged.id)
+                    #NodeChanged.esq= nodeRemoved.esq
+                    #NodeChanged.dir=nodeRemoved.dir
                     self.__raiz=NodeChanged
+                    self.__raiz.dir=self.__removerNo(NodeChanged.id,self.__raiz.dir)
                     
                 elif nodeRemoved.esq != None: self.__raiz= nodeRemoved.esq #Caso haja apenas um Node a esquerda 
                 elif nodeRemoved.dir != None: self.__raiz= nodeRemoved.dir #Caso haja apenas um Node a direita
@@ -223,41 +215,40 @@ class ArvoreBusca:
     
     #== == método que faz toda a chama recurssiva
     def __removerNo(self,key:any,node:Node)->Node:
-        
         #-- -- Caso tenha achado o nó:
-        if node.esq != None or node.dir != None: #checa se é possível dirigir-se para a direita ou para a esquerda
+        if node is not None:
+            if key < node.id:
+                node.esq=self.__removerNo(key,node.esq)
+            elif key > node.id:
+                node.dir=self.__removerNo(key,node.dir)
+            else:
+                if node.esq is None:
+                    aux=node.dir
+                    node=None
+                    return aux
+                elif node.dir is None:
+                    aux=node.esq
+                    node=None
+                    return aux
+                aux=self.__the_smaller(node.dir)
+                node=aux
+                node.dir=self.__the_smaller(node.dir,aux.id)
+            return node
+
             
-            if key<node.key: #checa se a chave é menor
-                nextNode=node.esq # o nó para testar será a esquerda deste
-                
-                if key==nextNode.key: # depois checa se o nó a esquerda é o procurado
-                    
-                    if nextNode.dir != None and nextNode.esq != None: # checa se ele é o 3º caso
-                        node.esq=self.__changeNode(nextNode.dir) 
-                    
-                    elif nextNode.esq != None: node.esq= nextNode.esq # checa se ele é 2º caso esquerda
-                    elif nextNode.dir != None: node.esq= nextNode.dir # checa se ele é 2º caso direita
-                    
-                    return nextNode #caso seja o nó procurado será retornado 
-
-         
-            elif key > node.key:#checa se a chave é maior
-                nextNode=node.dir # o nó para testar será a direita
-                if key==nextNode.key: # depois checa se o nó a direita é o procurado
-                    
-                    if nextNode.esq != None and nextNode.dir != None: # checa se ele é o 3º caso
-                        node.dir=self.__changeNode(nextNode.dir) 
-                    
-                    elif nextNode.esq != None: node.dir= nextNode.esq # checa se ele é 2º caso esquerda
-                    elif nextNode.dir != None: node.dir= nextNode.dir # checa se ele é 2º caso direita
-                    
-                    return nextNode #caso seja o nó procurado será retornado      
-    
-            return self.__removerNo(key,nextNode) #Há algum caminho para seguir, então continua
-        
         else: raise SearchArborException(2,'KEY NOT FOUND!') #Não há mais caminho para este nó
-
-
+   
+    def smaller(self):
+        return self.__the_smaller(self.__raiz)
+   
+    def __the_smaller(self,node:Node):
+        if node is None:
+            return
+        aux = node
+        while aux.esq is not None:
+            aux=aux.esq
+        print(aux.carga)
+        return aux
     def __changeNode(self, node:Node): #Checado, tá tranquilo  eu acho...
         lowerNode=node #O node é atribuido como o menor node daquela sub-árvore
         '''Caso o node possua uma sub-árvore, ele deverá trocado pelo menor nó a sua direita, ou seja, o node mais a esquerda da sua direita'''
@@ -357,5 +348,25 @@ class ArvoreBusca:
             return level + 1 # encontrou o nó na direita
         
         return level + 1# Não achou em nenhum dos casos
+    def __str__(self):
+        
+        #try:
+        #    assert not(self.estaVazia())
+        #    self.imprimir(self.__raiz)
+        #except AssertionError:
+        #    raise SearchArborException(1,'NO ROOT!')
+        return ''
+    def imprimir(self,val):
+        if self.estaVazia():
+            return ''
+        else:
+            return self.imprimir2(self.__raiz,val)
+    def imprimir2(self,no:Node,val):
+        if no==None:
+            return ''
+        print(no.carga, end='\n')
+        self.imprimir2(no.esq,val)
+        self.imprimir2(no.dir,val)
+    
     
     
