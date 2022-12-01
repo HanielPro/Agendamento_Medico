@@ -4,6 +4,7 @@ from Medico import *
 from Paciente import *
 from Especialidade import *
 import random
+
 #from EstruturasDeDados.Arvore.ArvoreBusca import *
 
 class ClinicException(Exception):
@@ -15,48 +16,46 @@ class Consultorio:
     
     def __init__(self) -> None:
         self.__Escpecialidades=Lista()#O nome está errado
-        self.__IndexEspecialidades=Lista()#index para as especialidades
+        #self.__IndexEspecialidades=Lista()#index para as especialidades
         self.__Pacientes=ArvoreBusca()
         self.__Medicos= ArvoreBusca()
         self.idcounter=list()
     
-    #== == == -- Métodos Relacionados Com A especialidade
+    #== == == -- Métodos Relacionados Com A Especialidade
     def inserirEspecilidade(self,nomeclatura:str)->None: # Insere uma especialidade na Lista de especialidades na clínica
         try:
             self.__Escpecialidades.inserir(nomeclatura, nomeclatura) # por enquanto, a chave será o próprio nome da lista
-        
+
         except ListaException as LE:
             raise ClinicException(LE)
     
     def removerEspecialidade(self,key:any)->None:# Remove uma especialidade na Lista de especialidades na clínica
+        
         try:
             posicao=self.__Escpecialidades.busca(key)
             self.__Escpecialidades.remover(posicao)
         except ListaException as LE:
             raise ClinicException(LE)
          
-    def ConsultarEspecialidade(self,key:any)->any:# Retorna as informações de uma especialidade
+    def exibirEspecialidade(self,key:any)->any:# Retorna as informações de uma especialidade
+        
         try:
             posicao=self.__Escpecialidades.busca(key)
             return self.__Escpecialidades.elemento(posicao)
         except ListaException as LE:
-            raise ClinicException('MEDICAL SPECIALITY NOT FOUND')
+            raise ClinicException(LE)
         
     #== == == -- Métodos relacionados ao Médico
     
-    def inserirMedico(self,nome:str,especialidade:str,ConsultasIntervalo:int=15)->None: #== == Adiciona um novo médico a Árvore de médicos
-        try:
-            
+    def inserirMedico(self,nome:str,especialidade:str)->None: #== == Adiciona um novo médico a Árvore de médicos
+        try:                
             key=self.ConsultarEspecialidade(especialidade)
-            id=self.getId()
-            NewMedic=Medico(id,nome,especialidade,ConsultasIntervalo)
+            id=self.__getId()
+            NewMedic=Medico(id,nome,especialidade)
             self.__Medicos.InserirNode(id,key,NewMedic)
             #self.__Medicos.inserir(key,NewMedic)
         except Exception as E:
-            print(E)
-    def ExibirMedicos(self):
-        self.__Medicos.imprimir()
-        return ''
+            print(E)        
     
     def RemoverMedico(self, key:any)->None: # Remove um médico da lista
         try:
@@ -64,40 +63,33 @@ class Consultorio:
             print('\033[31m'+'O médico com o id ',key,' foi demitido'+'\033[0;0m')
         except Exception as E:
             print(E)
-    def RemoverPaciente(self,key:any)->None:
-        try:
-            self.__Pacientes.removerNo(key)
-            print('\033[31m'+'O médico com o id ',key,' foi morto'+'\033[0;0m')
-        except Exception as E:
-            print(E)
+            
+    def ExibirMedicos(self): #Método que mostra todos os Médicos no consultório
+        return str(self.__Medicos)
     
-    def ConsultarMedico(self,key:any)->any:# Retorna as informações de uma especialidade
-        #try:
-            #posicao=self.__Medicos.busca(key)
-            #return self.__Medicos.elemento(posicao)
-        print('Já Já Consulta ', key)
-        #except ListaException as LE:
-        #    raise ClinicException('MEDICAL SPECIALITY NOT FOUND')
-    
-    def __str__(self):
-        print(self.__Escpecialidades)
-        return 'a'       
+
     # Metodos relacionados ao paciente
     def inserirPaciente(self,cpf:int,nome:str,especialidade:str,gravidade:str):
+    
         try:
-            key=self.ConsultarEspecialidade(especialidade)
             NewPaciente=Paciente(cpf,nome,especialidade,gravidade)
-            self.__Pacientes.InserirNode(cpf,key,NewPaciente)
+            self.__Pacientes.InserirNode(cpf,NewPaciente)
             #self.__Medicos.inserir(key,NewMedic)
         except Exception as E:
             print(E)
-    def ExibirMedicos(self):
-        self.__Medicos.imprimir(0)
-        return ''
-    def ExibirPacientes(self):
-        self.__Pacientes.imprimir(1)
-        return ''
-    def getId(self):
+    
+    def removerPaciente(self,key:any)->None:
+        try:
+            self.__Pacientes.removerNo(key)
+            print('\033[31m'+'O médico com o id ',key,'foi removido (não se sabe as causas)'+'\033[0;0m')
+        except Exception as E:
+            print(E)
+         
+    
+    def exibirPacientes(self): #Método que mostra todos os pacientes no consultório
+        return str(self.__Pacientes)
+    
+    def __getId(self):
         #num=(f'{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)}')
         flag=True
         while flag:
@@ -109,6 +101,7 @@ class Consultorio:
             else:
                 self.idcounter.append(num)
                 return num
+    
     #METODOS DE TESTES
     def findthesmaller(self):
         self.__Medicos.smaller()

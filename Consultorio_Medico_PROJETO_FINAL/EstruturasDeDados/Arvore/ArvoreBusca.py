@@ -348,25 +348,38 @@ class ArvoreBusca:
             return level + 1 # encontrou o nó na direita
         
         return level + 1# Não achou em nenhum dos casos
+    
     def __str__(self):
+        if self.estaVazia:
+            return None
+        s= self.__stringuificarNodes(self.__raiz)
+        return s
+    
+    
+    def __stringuificarNodes(self, node:Node):
+        cargaStrings=''
+        if node==None:
+            return cargaStrings #retorna uma string vazia
         
-        #try:
-        #    assert not(self.estaVazia())
-        #    self.imprimir(self.__raiz)
-        #except AssertionError:
-        #    raise SearchArborException(1,'NO ROOT!')
-        return ''
+        self.__emordem(node.esq)
+        
+        cargaStrings= f' key: {str(node.key)}| {str(node.carga)}\n'
+        
+        self.__emordem(node.dir)
+        return cargaStrings
+    
+    '''
     def imprimir(self,val):
         if self.estaVazia():
             return ''
         else:
             return self.imprimir2(self.__raiz,val)
+   
     def imprimir2(self,no:Node,val):
         if no==None:
             return ''
         print(no.carga, end='\n')
         self.imprimir2(no.esq,val)
         self.imprimir2(no.dir,val)
-    
-    
+    '''
     

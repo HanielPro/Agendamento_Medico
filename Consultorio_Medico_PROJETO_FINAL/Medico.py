@@ -8,12 +8,12 @@ class MedicException(Exception):
 
 class Medico:
     
-    def __init__(self,id,nome:str,especialidade:object,ConsultasIntervalo:int=15) -> None:
+    def __init__(self,id,nome:str,especialidade:object) -> None:
         
-        assert ConsultasIntervalo >= 30 and ConsultasIntervalo<=150 , MedicException('INVALID TIME FOR A EXAM')
+        #assert ConsultasIntervalo >= 30 and ConsultasIntervalo<=150 , MedicException('INVALID TIME FOR A EXAM')
         self.__nome=nome
         self.__especialidade=especialidade
-        self.__ConsultasIntervalo=ConsultasIntervalo
+        self.__ConsultasIntervalo=random.randint(15,30)
         self.__id=id
     
     @property
@@ -59,4 +59,4 @@ class Medico:
              
     
     def __str__(self) -> str:
-        return f'|{self.__id}|{self.__nome}|{self.__especialidade}|{self.__ConsultasIntervalo}'
+        return f'|{self.__id}| {self.__nome}| {str(self.__especialidade)}|{self.__ConsultasIntervalo}'
