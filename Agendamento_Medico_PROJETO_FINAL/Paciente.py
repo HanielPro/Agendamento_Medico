@@ -4,40 +4,13 @@ class PacientException(Exception):
 
 
 class Paciente:
-    '''
-    #== == == == O Paciente deverá conter:
-    #CPF= STRING, terá que ser de tamanho 11 (excluindo os '.' e o '-') ou tamanho 14 (incluindo os '.' e '-') {Será a responsável por identificar os pacientes.
-     # Não poderá existir pacientes com o mesmo CPF.
-     # Deverá ser uma propriedade inalterável. 
-    }
-
-    #Nome= String sem restrição {O nome do Paciente em questão}
     
-    #EspecialistaDesejado= String, sem restrição{
-        Ela é responsável por ditar com qual  Médico o Paciente deverá interagir{
-            EX: Paciente que busca um Oftamologísta, deve ser atendido por um Medico com especialidade em Oftalmologia             
-        }
-        O paciente pode desejar qualquer tipo de especialidade, mas o Hospital só poderá admitir uma consulta com  um Médico que contenha a tal especialidade.  
-        O Paciente só poderá desejar a consulta com um único especialista.
-    }
-    
-    #tempoEstimadoConsultaMinutos= Int, só pode ser aceito, consultas de 1 minuto ou acima{
-            Ela é  a responsável por permitir que  um paciente  entrar ou não na lista de espera do Médico{
-            EX: Um Paciente que possui uma consulta de 70 minutos, e o médico só possui  1 minuto livre, o paciente poderá entrar na fila, pois o limite ainda não foi atingido.
-        }         
-    }
-    '''
-    '''
-    #== == == == O Paciente deverá Fazer:
-    #Ele Poderá alterar seus atributos quando quiser desde que as modificações estejam de acordo com as restrições dos atributos.
-    '''
-    
-    def __init__(self,cpf:str, nome:str,especialista:str, tempoEstimadoConsultaMinutos:int) -> None:
+    def __init__(self,cpf:str, nome:str, especialidadeDesejada:str, gravidade:str) -> None:
         self.__nome=nome
-        self.__especialista=especialista
+        self.__especialidadeDesejada=especialidadeDesejada
         
-        if tempoEstimadoConsultaMinutos<0: raise PacientException('INVALID ENTERED TIME')
-        self.__tempoEstimadoConsultaMinutos= tempoEstimadoConsultaMinutos
+        #if tempoEstimadoConsultaMinutos<0: raise PacientException('INVALID ENTERED TIME')
+        #self.__tempoEstimadoConsultaMinutos= tempoEstimadoConsultaMinutos
         
         try:self.__cpf= self.validarCPF(cpf)
         except: raise PacientException('INVALID CPF ASSIGNMENT')
@@ -51,17 +24,19 @@ class Paciente:
         self.__nome=nome
 
     @property
-    def especialista(self):
-        return self.__especialista
+    def especialidadeDesejada(self):
+        return self.__especialidadeDesejada
     
-    @especialista.setter
-    def especialista(self,especialista):
-        self.__especialista=especialista
+    @especialidadeDesejada.setter
+    def especialidadeDesejada(self,especialidadeDesejada):
+        self.__especialidadeDesejada=especialidadeDesejada
     
+    '''
     @property
     def tempoEstimadoConsultaMinutos(self):
         return self.__tempoEstimadoConsultaMinutos
 
+    
     @tempoEstimadoConsultaMinutos.setter
     def tempoEstimadoConsultaMinutos(self,tempoEstimado:int):
         try:
@@ -70,6 +45,7 @@ class Paciente:
 
         except:
             raise PacientException('INVALID ENTERED TIME')
+    '''
         
     #== == == Responsável por checar se o CPF é válido   
     def validarCPF(self,cpf:str):
@@ -95,5 +71,6 @@ class Paciente:
         return False # o caractere não era um número
              
     def __str__(self) -> str:
-        return f'Nome: {self.__nome}, CPF: {self.__cpf} Especialista desejado: {self.__especialista}, tempo estimadoda consulta em minutos: {self.__tempoEstimadoConsultaMinutos}'
+        #return f'Nome: {self.__nome}, CPF: {self.__cpf} especialidadeDesejada desejado: {self.__especialidadeDesejada}, tempo estimadoda consulta em minutos: {self.__tempoEstimadoConsultaMinutos}'
+        return f'Nome: {self.__nome}, CPF: {self.__cpf} especialidadeDesejada desejado: {self.__especialidadeDesejada}'
     
