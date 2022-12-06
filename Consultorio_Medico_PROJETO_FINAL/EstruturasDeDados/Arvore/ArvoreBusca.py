@@ -26,6 +26,10 @@ class Node:
     def key(self):
         return self.__key
     
+    @key.setter
+    def key(self,key):
+        self.__key=key
+    
     def __str__(self):
         return f'key:{self.__key}| carga: {str(self.carga)}'
     
@@ -191,20 +195,30 @@ class ArvoreBusca:
             assert not(self.estaVazia())
             if key == self.__raiz.key: # testa se é o 4° caso
                 nodeRemoved=self.__raiz
-                if nodeRemoved.esq == None and nodeRemoved.dir is None:
+
+                if nodeRemoved.esq == None and nodeRemoved.dir is None:#só há a raiz
                     self.__raiz=None
-                if nodeRemoved.esq != None and nodeRemoved.dir != None: # testa se há nós a esquerda e a direita da raiz.
-                
-                    NodeChanged=self.__the_smaller(nodeRemoved.dir)
-                    print(NodeChanged.key)
-                    #NodeChanged.esq= nodeRemoved.esq
-                    #NodeChanged.dir=nodeRemoved.dir
-                    self.__raiz=NodeChanged
-                    self.__raiz.dir=self.__removerNo(NodeChanged.key,self.__raiz.dir)
                     
-                elif nodeRemoved.esq != None: self.__raiz= nodeRemoved.esq #Caso haja apenas um Node a esquerda 
-                elif nodeRemoved.dir != None: self.__raiz= nodeRemoved.dir #Caso haja apenas um Node a direita
-            
+                if nodeRemoved.esq != None and nodeRemoved.dir != None: #caso haja elementos tanto do lado esquerdo, quando no diretio.
+                    NodeChanged=self.__the_smaller(self.raiz.dir)# o menor elemento do lado esquerdo vai ser caçado para substituir a
+                    self.__raiz.carga,nodeRemoved.key=NodeChanged.carga,NodeChanged.key#seus conteudo serão trocados
+                    self.__raiz.dir=self.__removerNo(NodeChanged.key,self.__raiz.dir)# agora que o nó a ser removido não é mais a raiz, e sim um folha, será removido de uma vez
+
+                #caso um dos lado estaja vazio.
+                elif nodeRemoved.esq != None:
+                    NodeChanged=self.__the_bigger(self.raiz.esq)
+                    
+                    self.__raiz.carga=NodeChanged.carga
+                    nodeRemoved.key=NodeChanged.key
+                    self.__raiz.dir=self.__removerNo(NodeChanged.key,self.__raiz.dir)
+
+                elif nodeRemoved.dir != None:
+                    #nesse caso haverá um tratamento especial, como se trata do nó esquerdo, onde os menores numeros relativos
+                    #a raiz ficam armazenados, teriamos que caçar o maior nó desse hemisfério.
+                    NodeChanged=self.__the_smaller(self.raiz.dir)
+                    self.__raiz.carga,nodeRemoved.key=NodeChanged.carga,NodeChanged.key
+                    self.__raiz.esq=self.__removerNo(NodeChanged.key,self.__raiz.esq)
+
             else:    
                 nodeRemoved= self.__removerNo(key,self.__raiz)
             return nodeRemoved
@@ -214,24 +228,30 @@ class ArvoreBusca:
     
     #== == método que faz toda a chama recurssiva
     def __removerNo(self,key:any,node:Node)->Node:
-        #-- -- Caso tenha achado o nó:
         if node is not None:
+            #essas duas condições, naturalmente, fará a verificação se o node está na árvore.
             if key < node.key:
                 node.esq=self.__removerNo(key,node.esq)
+            
             elif key > node.key:
                 node.dir=self.__removerNo(key,node.dir)
+            #neste cenário, o nó em questão foi achado, e entrará no processo de remoção sem afetar os demais nós
             else:
                 if node.esq is None:
                     aux=node.dir
                     node=None
                     return aux
+                
                 elif node.dir is None:
                     aux=node.esq
                     node=None
                     return aux
+                #aqui o seu substituto será copiado para o lugar do nó removido
                 aux=self.__the_smaller(node.dir)
                 node=aux
-                node.dir=self.__the_smaller(node.dir,aux.key)
+                #aqui a versão original será removida
+                node.dir=self.__removerNo(aux.key,node.dir)
+
             return node
 
         else: raise SearchArborException(2,'KEY NOT FOUND!') #Não há mais caminho para este nó
@@ -239,13 +259,23 @@ class ArvoreBusca:
     def smaller(self):
         return self.__the_smaller(self.__raiz)
    
-    def __the_smaller(self,node:Node):
+    def __the_smaller(self,node:Node)->Node:
         if node is None:
             return
         aux = node
-        while aux.esq is not None:
+        while aux.esq is not None:#se houver um nó a esquerda do nó atual, significa que há um nó menor
             aux=aux.esq
-        print(aux.carga)
+        return aux
+    
+    def bigger(self):
+        return self.__the_bigger(self.__raiz)
+
+    def __the_bigger(self,node:Node)->Node:
+        if node is None:
+            return
+        aux = node
+        while aux.dir is not None:#se houver um nó a direita do nó atual, significa que há um nó maior
+            aux=aux.dir
         return aux
     
     def __changeNode(self, node:Node): #Checado, tá tranquilo  eu acho...

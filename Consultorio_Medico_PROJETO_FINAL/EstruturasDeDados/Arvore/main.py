@@ -21,43 +21,62 @@ def MostrarDicionario(dicionario:dict, Chave:str = '1'):
     MostrarDicionario(dicionario, str(int(Chave) +1 ) )
         
 
-opcoesArvore={
-    '0':'Mostrar o tamanho da árvore',
-    '1': 'Adicionar Nó raiz',
-    '2':'Inserir Nó. ',
-    '3':'Remover Nó.',
-    '4':'Esvaziar a Árvore',
-    '5':'Buscar se existe um Nó.',
-    '6':'Mostrar Nós em Pré-Ordem',
-    '7':'Mostrar Nós em In-Ordem',
-    '8':'Mostrar Nós em Pós-Ordem',
-    '9': 'Contar a quantidade de nós folhas',
-    '10': 'Calcular a altura da árvore',
-    '11': 'Encontrar o nível de um nó ',
-    '-':'finalizar o programa',
-}
-
-opcoesArvoreChaves= list(opcoesArvore.keys())
+opcoesArvore=[
+    'Mostrar o tamanho da árvore',
+    'Adicionar Nó raiz',
+    'Inserir Nó. ',
+    'Remover Nó.',
+    'Esvaziar a Árvore',
+    'Buscar se existe um Nó.',
+    'Mostrar Nós em Pré-Ordem',
+    'Mostrar Nós em In-Ordem',
+    'Mostrar Nós em Pós-Ordem',
+    'Contar a quantidade de nós folhas',
+    'Calcular a altura da árvore',
+    'Encontrar o nível de um nó ',
+    'finalizar o programa',
+]
 arv=ArvoreBusca()
-#== == Árvore já preenchida:
-arv.InserirNode(20,'por seus')
-arv.InserirNode(11,'ele')
-arv.InserirNode(22,'pobre')
-arv.InserirNode(13,'te')
-arv.InserirNode(15,'encontrará')
-arv.InserirNode(19,'pagará')
-arv.InserirNode(40,'lazarento')
-arv.InserirNode(23,'homem')
-arv.InserirNode(10,'dia')
-arv.InserirNode(5,'Um')
-arv.InserirNode(21,'pecados')
-arv.InserirNode(12,'virá e')
-arv.InserirNode(18,'você')
-#arv.emordem()
-
-print('==========================')
-print('nó removido',arv.removerNo(20))
-print(arv)
+while True:
+    for i in range(len(opcoesArvore)):#achei meio desnecessário
+        print('\033[32m'+str(i)+' = '+opcoesArvore[i]+'\033[0;0m')
+    cmd=int(input('digite o comendo: '))
+    if cmd == 12:
+        break
+    elif cmd==11:
+        pass
+    elif cmd==10:
+        pass
+    elif cmd==9:
+        pass
+    elif cmd==8:
+        print('\033[33m'+'Pós-Ordem'+'\033[0;0m')
+        arv.posordem()
+    elif cmd==7:
+        print('\033[33m'+'In-Ordem'+'\033[0;0m')
+        arv.emordem()
+    elif cmd==6:
+        print('\033[33m'+'Pré-Ordem'+'\033[0;0m')
+        arv.preordem()
+    elif cmd==5:
+        pass
+    elif cmd==4:
+        pass
+    elif cmd==3:
+        print('\033[33m'+'Removendo:'+'\033[0;0m')
+        key=int(input('número inteiro para a key: '))
+        arv.removerNo(key)
+    elif cmd==2:
+        print('\033[33m'+'Adicionando:'+'\033[0;0m')
+        key=int(input('número inteiro para a key: '))
+        carga=input('qualquer porcaria para a carga: ')
+        arv.InserirNode(key,carga)
+    elif cmd==1:
+        pass
+    elif cmd==0:
+        pass
+    else:
+        print('Comando inválido, seu animal')
 '''
 while True:
     try:
