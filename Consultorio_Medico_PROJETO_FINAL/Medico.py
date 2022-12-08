@@ -62,5 +62,5 @@ class Medico:
              
     
     def __str__(self) -> str:
-        return f'| matrícula: {self.__matricula}| nome: {self.__nome}| especialide: {str(self.__especialidade)}| consultas sequenciais: {self.__ConsultasIntervalo}'
+        return f' | matrícula: {self.__matricula}|  nome:{self.__nome}| especialide: {str(self.__especialidade)}| consultas sequenciais: {self.__ConsultasIntervalo}'
     

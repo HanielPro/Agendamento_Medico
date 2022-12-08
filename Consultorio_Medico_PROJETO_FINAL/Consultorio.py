@@ -5,7 +5,7 @@ from Paciente import *
 from Especialidade import *
 import random
 
-import unidecode #!! !! !! !! Precisa importar a biblioteca unide code:  $pip install unidecode
+from unicodedata import normalize #!! !! !! !! Precisa importar a biblioteca unide code:  $pip install unidecode
 
 
 #from EstruturasDeDados.Arvore.ArvoreBusca import *
@@ -34,11 +34,12 @@ class Consultorio:
     #== == == -- Métodos Relacionados Com A Especialidade
     
     def verificarEspecialidade(self,key:any)->bool: #Confere se existe uma determinada especialidade no hospital         
-        return self.__Especialidades.AutenticarChave(key)
+        return self.__Especialidades.autenticarChave(key)
     
     def inserirEspecilidade(self,nomeclatura:str)->None: # Insere uma especialidade na Lista de especialidades na clínica
         try:
-            self.__Especialidades.inserir(nomeclatura, nomeclatura) # por enquanto, a chave será o próprio nome da lista
+            newEspeciality =Especialidade(nomeclatura)
+            self.__Especialidades.inserir(nomeclatura, newEspeciality) # por enquanto, a chave será o próprio nome da lista
 
         except ListaException as LE:
             raise ClinicException(0,LE)
@@ -62,13 +63,13 @@ class Consultorio:
     #== == == -- Métodos relacionados ao Médico    
     def inserirMedico(self, nome:str,especialidadeMedica:str)->None: #== == Adiciona um novo médico a Árvore de médicos
         try:
-            id=self.__gerarID(self.__types['MEDICO'])
+            id=self.__gerarID(nome,self.__types['MEDICO'])
    
             especialidadeCheck= self.captarEspecialidade(especialidadeMedica)
                      
             NewMedic=Medico(id,nome,especialidadeCheck)
             
-            self.__Medicos.InserirNode(NewMedic)
+            self.__Medicos.InserirNode(id,NewMedic)
 
         except ClinicException:
                 raise ClinicException(3,'SPECIALITY NOT FOUND')       
@@ -84,7 +85,7 @@ class Consultorio:
             raise ClinicException(2,'MEDIC NOT FOUND')
             
             
-    def ExibirMedicos(self): #Método que mostra todos os Médicos no consultório
+    def exibirMedicos(self): #Método que mostra todos os Médicos no consultório
         return str(self.__Medicos)
     
     #== == == -- Metodos relacionados ao paciente
@@ -107,7 +108,7 @@ class Consultorio:
         try:
             
             pacienteRemover=self.__Pacientes.removerNo(key) # Remove o paciente do consultório e faz a coleta do objeto             
-            especialidadePaciente=self.captarEspecialidade(pacienteRemover.carga.especialidade)#em seguida, obtem qual a especialidade ele está inserido.
+            especialidadePaciente=self.captarEspecialidade(pacienteRemover.especialidadeDesejada)#em seguida, obtem qual a especialidade ele está inserido.
             especialidadePaciente.RemoverPaciente(key) #Por fim, remove ele da fila de espera
             
             print('\033[31m'+'O paciente com o id ',key,'foi removido (não se sabe as causas)'+'\033[0;0m')
@@ -132,10 +133,10 @@ class Consultorio:
             idAutentico= self.__trueGerarID(nome)
 
             if type == 1: #tipo MÉDICO
-                if not(self.__Medicos.busca(idAutentico)):break # Caso n ache o id na estrutura de dados do médico
+                if not(self.__Medicos.autenticarChave(idAutentico)):break # Caso n ache o id na estrutura de dados do médico
     
             elif type == 2: #tipo PACIENTE
-                if not(self.__Pacientes.busca(idAutentico)): break # Caso n ache o id na estrutura de dados do médico
+                if not(self.__Pacientes.autenticarChave(idAutentico)): break # Caso n ache o id na estrutura de dados do médico
     
         return idAutentico
     
@@ -143,14 +144,18 @@ class Consultorio:
         tamanhoId=10
         idGerado=''
         finalValor=2
+        #nomeSemAcento=nome
+        nomeSemAcento = normalize('NFD',nome)
+        nomeSemAcento = nomeSemAcento.encode('ascii','ignore')
+        nomeSemAcento = nomeSemAcento.decode('utf-8')
      
         for i in range(tamanhoId): # controla o tamanho do id    
                 
             if i < 3:
-                idGerado+= str.upper(unidecode(nome[i]))
+                idGerado+= str.upper(nomeSemAcento[i])
                     
             elif i > 7:
-                idGerado+= str.upper(unidecode( nome[-(finalValor)]))
+                idGerado+= str.upper(nomeSemAcento[-(finalValor)])
                 finalValor-=1
                 
             else: 

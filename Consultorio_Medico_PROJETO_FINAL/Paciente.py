@@ -71,5 +71,5 @@ class Paciente:
             raise PacientException(2,'INVALID GRAVITY ENTRY')
     
     def __str__(self) -> str:
-        return f'cpf: {self.__cpf}|Nome: {self.__nome}|Desejo: {self.__especialidadeDesejada}| Gravidade: {self.__gravidade}'
+        return f'cpf: {self.__cpf}| Nome: {self.__nome}| Desejo: {self.__especialidadeDesejada}| Gravidade: {self.__gravidade}'
     

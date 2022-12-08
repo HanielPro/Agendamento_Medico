@@ -27,7 +27,7 @@ class Node:
         return self.__key
     
     def __str__(self):
-        return f'key:{self.__key}| carga: {str(self.carga)}'
+        return f'| {str(self.carga)} | '
     
 #== == == ==Classe que contém todos os métodos aárvore binária
 class ArvoreBusca:
@@ -179,7 +179,7 @@ class ArvoreBusca:
     
     #== == == Método para remover Nós em uma árvore de busca
 
-    def removerNo(self,key:any)->Node:
+    def removerNo(self,key:any)->any:
         try:
             '''
             # 1º caso: O Node é um nó folha
@@ -207,7 +207,8 @@ class ArvoreBusca:
             
             else:    
                 nodeRemoved= self.__removerNo(key,self.__raiz)
-            return nodeRemoved
+            
+            return nodeRemoved.carga
    
         except AssertionError:
             raise SearchArborException(1,'NO ROOT!')
@@ -284,31 +285,12 @@ class ArvoreBusca:
     
             proximoNo.dir= proximoNo=self.libera(proximoNo.dir)
         return None
-        level=0
-
-        if NodeAtual==None:
-            return level # caso tenha chegado no extremo da árvore
-        
-        if NodeAtual.carga == key:  # ele achou a carga, então retornará 1
-            return level + 1
-        
-        level = self.__getLevel(key,NodeAtual.esq)
-        if level: 
-            return level + 1 # encontrou o nó na esqueda
-        
-        level = self.__getLevel(key,NodeAtual.dir)
-        if level: 
-            return level + 1 # encontrou o nó na direita
-        
-        return level + 1# Não achou em nenhum dos casos
-    
     
     def __str__(self):
         if self.estaVazia():
             return None
         s= self.__stringuificarNodes(self.__raiz)
         return s
-    
     
     def __stringuificarNodes(self, node:Node):
         cargaString=''
@@ -317,9 +299,16 @@ class ArvoreBusca:
             return cargaString #retorna uma string vazia
         
         cargaString+=self.__stringuificarNodes(node.esq)
-        cargaString+= f' {node}\n'
+        cargaString+= f' {node}\n{ "===" * 30 }\n'
         
         cargaString+=self.__stringuificarNodes(node.dir)
         
         return cargaString
+    
+    def autenticarChave(self,key)->bool: #Este método percorerá toda a lista a fim de conferir se já existe a chave
+        try:
+            if self.busca(key):
+                return True
+        except SearchArborException:
+            return False
     

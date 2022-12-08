@@ -11,7 +11,7 @@ class Node:
         self.prox=None
         
     def __str__(self) -> str:
-        return f'key:{self.key}, Carga: {self.carga}'
+        return f'{self.carga}'
 
 class NodeLeader:
     def __init__(self) -> None:
@@ -48,9 +48,9 @@ class Lista:
         except AssertionError as AE:
             raise ListaException(AE)
     
-    def __elemento(self, posicao:int, Node:Node) -> Node:
+    def __elemento(self, posicao:int, Node:Node) -> any:
         if posicao==1: # chegou na posição do Nó 
-            return Node # retorna o nó na tal posição
+            return Node.carga # retorna o nó na tal posição
         return self.__elemento(posicao - 1, Node.prox) #Quero andar passo por passo, confiando que chegarei no 0
 
 #== == == == Método que retornára a posição de um Nó através do valor no qual foi inserido.
@@ -85,8 +85,6 @@ class Lista:
         NodeToChange=self.elemento(posicao)
         NodeToChange.carga=content
         #NodeToChange.carga.ChangeValue(contentName,content) # Implementar dentro da carga do nó este método
-        
-    
             
     #== == Adiciona um novo Nó na lista,dependendo da posição.
     def inserir(self, key:any, conteudo:any,posicao:int=1):
@@ -94,7 +92,7 @@ class Lista:
             assert posicao > 0 and \
                 posicao <= self.__NodeLeader.quantyNodes + 1
                 
-            if(self.AutenticarChave(key)):
+            if(self.autenticarChave(key)):
                 raise ListaException('THE KEY IS IN USE')
                 
             newNode=Node(key,conteudo)
@@ -134,7 +132,7 @@ class Lista:
         self.__inserir(Node.prox,posicao-1,newNode)
         
     #== == Remove o  Nó  a partir de uma determinada posição
-    def remover(self,posicao:int)->Node:
+    def remover(self,posicao:int)->any:
         try:
             assert not self.estaVazia() ,'EMPTY LIST'
             assert posicao > 0 and posicao <= self.__NodeLeader.quantyNodes, 'INVALID POSITION'
@@ -154,7 +152,7 @@ class Lista:
                 NodeRemotion=self.__remover(posicao,self.__NodeLeader.start)
             
             self.__NodeLeader.quantyNodes-=1 #Diminui a quantidade de Nós da lista
-            return NodeRemotion #== == Retorna o nó que foi removido
+            return NodeRemotion.carga #== == Retorna o nó que foi removido
     
         except AssertionError as AE:
             raise ListaException(AE)
@@ -191,11 +189,10 @@ class Lista:
     def __str__(self)->str:
         s=f'Quantidade:{self.__NodeLeader.quantyNodes}\n'
         for i in range(self.__NodeLeader.quantyNodes): #não queria usar uma repetição, mas fiquei com preguiça :(
-            s+= f'{i+1}|{self.elemento(i+1)}\n'
-
+            s+= f'{i+1}|{self.elemento(i+1)}\n{ "===" * 30 }\n'
         return s
     
-    def AutenticarChave(self,key)->bool: #Este método percorerá toda a lista a fim de conferir se já existe a chave
+    def autenticarChave(self,key)->bool: #Este método percorerá toda a lista a fim de conferir se já existe a chave
         try:
             if self.busca(key):
                 return True
