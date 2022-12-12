@@ -37,7 +37,7 @@ class Lista:
         return self.__NodeLeader.quantyNodes
 
 #== == == == Método que retornára o contéudo de um nó dependendo da possição exigida.
-    def elemento(self, posicao:int)->Node:
+    def elemento(self, posicao:int)->any:
         try:
             #== == Só funciona se: a lista NÃO estiver vazia e a posição inserida não exceda o tamanho da lista.
             assert not self.estaVazia() ,'THE LIST IS EMPTY'
@@ -56,8 +56,8 @@ class Lista:
 #== == == == Método que retornára a posição de um Nó através do valor no qual foi inserido.
     def busca(self, key:any)->int: #== ==  Ele busca a partir de uma chave
         ''' 
-        n=
-            0: Sem incidências da chaves
+        return
+            -1: Sem incidências da chaves
             n>0: posição da chave
         '''
         #== == O método só não funciona quando a lista estiver vazia
@@ -66,10 +66,10 @@ class Lista:
         return self.__busca(key,self.__NodeLeader.start) #Chama a função recursiva
                               
         
-    def __busca(self, key:any, Node:Node)->Node:
+    def __busca(self, key:any, Node:Node)->int:
         NodePosition=1
         if Node==None: # Chegou ao final a lista e não achou o Nó
-            raise ListaException('KEY NOT FOUND')
+           raise ListaException('KEY NOT FOUND')
         
         elif key == Node.key: # Vê se o nó da vez possui a chave  
             return 1 # Ele achou!

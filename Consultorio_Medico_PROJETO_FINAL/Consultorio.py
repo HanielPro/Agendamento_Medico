@@ -11,11 +11,13 @@ from unicodedata import normalize #!! !! !! !! Precisa importar a biblioteca uni
 #from EstruturasDeDados.Arvore.ArvoreBusca import *
 
 class ClinicException(Exception):
+    '''
+        0: Não foi possível inserir os dados em uma Lista, cheque a mensagem da Exception e tente novamente
+        1: Não foi possível encontrar uma determinade chave.
+        2: Não foi possível encontrar determinado médico, verifique a chave inserida
+        3: Foi inserida uma especialidade que não foi cadastrada na clínica.
+    '''
     def __init__(self, code:int, msg:str) -> None:
-        #0: Não foi possível inserir os dados em uma Lista, cheque a mensagem da Exception e tente novamente
-        #1: Não foi possível encontrar uma determinade chave.
-        #2: Não foi possível encontrar determinado médico, verifique a chave inserida
-        #3: Foi inserida uma especialidade que não foi cadastrada na clínica.
         super().__init__(f'Clinic Exception {code}: ', msg)
         
 
