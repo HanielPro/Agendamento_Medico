@@ -4,9 +4,9 @@ from Consultorio import Consultorio,ClinicException
 
 class SalaRecepcao():
     
-    def __init__(self):
+    def __init__(self,consultorio:Consultorio):
         self.__listaAguardo= Lista()
-        self.__consultorio= Consultorio()
+        self.__consultorio= consultorio
     
     def __str__(self) -> str:
         return str(self.__listaAguardo)
@@ -53,39 +53,63 @@ class SalaRecepcao():
         pacienteDespacho=self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
         try:
             #self.__consultorio.inserirPaciente(pacienteDespacho) #seria interessante enviar o objeto diretamente para o consultório ao invés de enviar os atributos.
-            self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.gravidade)
+            self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho)
         except ClinicException as CE:
             return f'-ERR: OCURRIED THIS ERROR: {CE}'
         
     
     #== == Esta função envia todos os pacientes da lista de aguardo da Sala de Recepção para o consultório
-    def despacharTodosrPacientes(self):
+    def despacharTodosPacientes(self):
         '''Envia todos os pacientes da lista de aguardo para o consultório'''
         
         Allpatitent=self.__listaAguardo.esvazia()
         
         for pacienteDespacho in Allpatitent:
             try:
-            #self.__consultorio.inserirPaciente.inserirPaciente(i) #método que envia um objeto
-                self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.gravidade)
+                #self.__consultorio.inserirPaciente.inserirPaciente(i) #método que envia um objeto
+                self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.stringuificarGravidade())
+    
             except ClinicException as CE:
                 return f'-ERR: OCURRIED THIS ERROR: {CE}'
-        
+    
+    
+    # !! !! !! !! Esses métodos estão dentro da Sala de espera mas não deveriam está aqui.
+    def consultarConsutorio(self):
+        return str(self.__consultorio)
+
     
 if __name__=='__main__':
-    sala1=SalaRecepcao()
+
+    consu1=Consultorio()
+    consu1.inserirEspecilidade('Clinica Geral')
+    consu1.inserirEspecilidade('Pediatria')
+    consu1.inserirEspecilidade('Oftalmologia')
+    consu1.inserirEspecilidade('Psiquiatria')
+    consu1.inserirEspecilidade('Cirurgia Geral')
+    
+    consu1.inserirMedico('Carlinhos Maia','Psiquiatria')
+    consu1.inserirMedico('Ian Ribeiro','Pediatria')
+    consu1.inserirMedico('Luis Kilmer Inacio da Silva','Pediatria')
+    consu1.inserirMedico('Marcos Mion','Oftalmologia')
+    consu1.inserirMedico('Gabriel Araujo','Cirurgia Geral')
+    consu1.inserirMedico('Paula Tejano','Clinica Geral')
+
+    sala1=SalaRecepcao(consu1)
     sala1.ListarPaciente("34823019705","Joaseiro da Costa","Pediatria","L2")
     sala1.ListarPaciente("56567424223","Pedro Neto SIlveira","Psiquiatria","G")
     sala1.ListarPaciente("12321313323","Rogerio SIlveira","Pediatria","M2")
-    sala1.ListarPaciente("12321313353","Paulo Florinopolis","Pediatria","G")
-    sala1.ListarPaciente("12321313853","Paulo Cantando","Pediatria","G")
-    sala1.ListarPaciente("12321313653","Paulo Subindo","Psiquiatria","G")
+    sala1.ListarPaciente("12321313301","Paulo Florinopolis","Pediatria","G")
+    sala1.ListarPaciente("12321313820","Paulo Cantando","Pediatria","G")
+    sala1.ListarPaciente("12321313834","Paulo lanchando","Pediatria","L1")
+    sala1.ListarPaciente("12321313853","Paulo bebendo","Pediatria","L1")
+    sala1.ListarPaciente("12321313872","Paula Sorrino","Pediatria","L1")
+    sala1.ListarPaciente("12321313651","Paulo Subindo","Psiquiatria","G")
     sala1.ListarPaciente("12321313303","Paulo Chorando","Pediatria","G")
     sala1.ListarPaciente("12321313356","Paula Equinó","Pediatria","L1")
     
     print(sala1)
     input()
-    
+    '''   
     sala1.removerPaciente('56567424223')
     print(sala1)
     input('removido o paciente 56567424223....')
@@ -93,7 +117,14 @@ if __name__=='__main__':
     sala1.despacharPaciente('12321313356')
     print(sala1)
     input('despachado o paciente 12321313356....')
-    
+
     sala1.removerTodosPacientes()
     print(sala1)
     input('removido todos pacientes....')
+    '''
+    sala1.despacharTodosPacientes()
+    print(sala1)
+    input('Mostrando as informações do consultório')
+
+    #-- -- Testando o consultorio
+    print(sala1.consultarConsutorio())

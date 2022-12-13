@@ -1,4 +1,6 @@
 import random
+from unicodedata import normalize #!! !! !! !! Precisa importar a biblioteca unide code:  $pip install unidecode
+
 def gerarID(nome:str)-> str: # a função gera um id aleatório e confirma se n existe na estrutura de dados 5 vezes
     nome= nome.split()
     nome= ''.join(nome)
@@ -26,4 +28,6 @@ def trueGerarID(nome:str):
             idGerado+=str(chr(random.randrange(65, 90)))
     return idGerado
 
-print(gerarID('Haniel Costa'))
+print(gerarID('Hániel Costá'))
+
+print(normalize('NFC','áááááá´aáááá´aáaáá'))

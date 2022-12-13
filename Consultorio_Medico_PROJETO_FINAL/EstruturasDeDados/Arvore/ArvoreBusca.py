@@ -41,6 +41,12 @@ class ArvoreBusca:
              5         21     49
           3    8          23
     '''
+    def __str__(self)->str:
+        if self.estaVazia():
+            return 'Empty'
+        s= self.__stringuificarNodes(self.__raiz)
+        return s
+    
     @property
     def raiz(self):
         return self.__raiz
@@ -286,11 +292,6 @@ class ArvoreBusca:
             proximoNo.dir= proximoNo=self.libera(proximoNo.dir)
         return None
     
-    def __str__(self):
-        if self.estaVazia():
-            return None
-        s= self.__stringuificarNodes(self.__raiz)
-        return s
     
     def __stringuificarNodes(self, node:Node):
         cargaString=''

@@ -6,14 +6,14 @@ class PacientException(Exception):
 
 
 class Paciente:
-    __gravidadePeso={
+    __gravidadeValores={
         'L1': 1,
         'L2': 3,
         'M1': 9,
         'M2': 15,
         'G': 21,
     }
-    __pesoGravidade={
+    __TraducoesPesosGravidade={
          '1': 'L1',
          '3': 'L2',
          '9': 'M1',
@@ -25,19 +25,21 @@ class Paciente:
         try:self.__cpf= self.validarCPF(cpf)
         except: raise PacientException(1,'INVALID CPF ASSIGNMENT')
 
-        self.__nome=nome
-        self.__especialidadeDesejada=especialidadeDesejada
-        self.__gravidade=self.__traduzirGravidade(gravidade)
+        self.__nome=nome.upper()
+        self.__especialidadeDesejada=especialidadeDesejada.upper()
+        self.__gravidadePeso=self.__gravidadeValores.get(gravidade)
+        if self.__gravidadePeso==None:
+            raise PacientException(2,'iNVALIDY GRAVITY ENTRY')
         
     
     def __eq__(self, __outroPaciente: object) -> bool:
         if isinstance(__outroPaciente,Paciente):
-            return self.__gravidade == __outroPaciente.gravidade
+            return self.__gravidadePeso == __outroPaciente.gravidadePeso
         return False
     
     def __gt__(self, __outroPaciente: object)->bool:
         if isinstance(__outroPaciente,Paciente):
-            return self.__gravidade > __outroPaciente.gravidade
+            return self.__gravidadePeso > __outroPaciente.gravidadePeso
         return False
     
     #== == == Property e setters
@@ -58,8 +60,8 @@ class Paciente:
         return self.__especialidadeDesejada
     
     @property
-    def gravidade(self)->int:
-        return self.__gravidade
+    def gravidadePeso(self)->int:
+        return self.__gravidadePeso
     
     @especialidadeDesejada.setter
     def especialidadeDesejada(self,especialidadeDesejada):
@@ -89,15 +91,15 @@ class Paciente:
             return self.__validarCPF(cpf[1:]) # envia o próximo caractere
         
         return False # o caractere não era um número
+        
     
-    def __traduzirGravidade(self,gravidadeNome:str)->int:#retorna o valor contido no dicionário, referente a um valor de gravidade
-    
-        peso=self.__gravidadePeso.get(gravidadeNome)
-        if peso ==None:
-            raise PacientException(2,'INVALID GRAVITY ENTRY')
+    def stringuificarGravidade(self):
+        peso= self.__TraducoesPesosGravidade.get(str(self.__gravidadePeso))
         return peso
+    
+    
         
     
     def __str__(self) -> str:
-        return f'cpf: {self.__cpf}| Nome: {self.__nome}| Desejo: {self.__especialidadeDesejada}| Gravidade: {self.__pesoGravidade[str(self.__gravidade)]}'
+        return f'cpf: {self.__cpf}| Nome: {self.__nome}| Desejo: {self.__especialidadeDesejada}| Gravidade: {self.__TraducoesPesosGravidade[str(self.__gravidadePeso)]}'
     

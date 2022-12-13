@@ -24,7 +24,8 @@ class ClinicException(Exception):
 class Consultorio:   
     __types={
         'MEDICO':1,
-        'PACIENTE':2
+        'PACIENTE':2,   
+        'ESPECIALIDADE':3
         }
     def __init__(self) -> None:
         self.__Especialidades=Lista() #possui uma lista com todas as especialidades
@@ -35,13 +36,31 @@ class Consultorio:
     
     #== == == -- Métodos Relacionados Com A Especialidade
     
+    def __str__(self) -> str:
+
+        s=''
+        s+=f'{("==="*15 +"Pacientes" + "==="*15):^30}\n'
+        s+=str(self.__Pacientes)
+        s+='\n'
+
+        s+=f'{("==="*15 +"Medicos" + "==="*15):^30}\n'
+        s+=str(self.__Medicos)
+        s+='\n'
+
+        s+=f'{("==="*15 +"Especialidades" + "==="*15):^30}\n'
+        s+=str(self.__Especialidades)
+        s+='\n'
+        return s
+
+    
+    
     def verificarEspecialidade(self,key:any)->bool: #Confere se existe uma determinada especialidade no hospital         
         return self.__Especialidades.autenticarChave(key)
     
     def inserirEspecilidade(self,nomeclatura:str)->None: # Insere uma especialidade na Lista de especialidades na clínica
         try:
-            newEspeciality =Especialidade(nomeclatura)
-            self.__Especialidades.inserir(nomeclatura, newEspeciality) # por enquanto, a chave será o próprio nome da lista
+            newEspeciality = Especialidade(nomeclatura)
+            self.__Especialidades.inserir(nomeclatura.upper(), newEspeciality) # por enquanto, a chave será o próprio nome da lista
 
         except ListaException as LE:
             raise ClinicException(0,LE)
@@ -67,9 +86,9 @@ class Consultorio:
         try:
             id=self.__gerarID(nome,self.__types['MEDICO'])
    
-            especialidadeCheck= self.captarEspecialidade(especialidadeMedica)
+            especialidadeCheck= self.captarEspecialidade(especialidadeMedica.upper())
                      
-            NewMedic=Medico(id,nome,especialidadeCheck)
+            NewMedic=Medico(id,nome.upper(),especialidadeCheck)
             
             self.__Medicos.InserirNode(id,NewMedic)
 

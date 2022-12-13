@@ -1,6 +1,7 @@
 import random
 import time
 from Paciente import Paciente
+from Especialidade import Especialidade
 
 
 class MedicException(Exception):
@@ -9,11 +10,11 @@ class MedicException(Exception):
 
 class Medico:
     
-    def __init__(self,matricula,nome:str,especialidade:object) -> None:
+    def __init__(self,matricula,nome:str,especialidade:Especialidade) -> None:
         
         #assert ConsultasIntervalo >= 30 and ConsultasIntervalo<=150 , MedicException('INVALID TIME FOR A EXAM')
         self.__matricula=matricula
-        self.__nome=nome
+        self.__nome=nome.upper()
         self.__especialidade=especialidade
         self.__ConsultasIntervalo=random.randint(15,30)
     
@@ -37,7 +38,7 @@ class Medico:
     
     @property
     def ConsultasIntervalo(self):
-        return self.__tempoEstimadoConsultaMinutos
+        return self.__ConsultasIntervalo
     
     @ConsultasIntervalo.setter
     def ConsultasIntervalo(self,novoIntervalo:int):
@@ -62,5 +63,4 @@ class Medico:
              
     
     def __str__(self) -> str:
-        return f' | matrícula: {self.__matricula}|  nome:{self.__nome}| especialide: {str(self.__especialidade)}| consultas sequenciais: {self.__ConsultasIntervalo}'
-    
+        return f' | matrícula: {self.__matricula}|  nome:{self.__nome}| especialide: {str(self.__especialidade.nomeclatura)}| consultas sequenciais: {self.__ConsultasIntervalo}'

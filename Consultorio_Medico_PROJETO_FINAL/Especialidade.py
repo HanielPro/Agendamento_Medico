@@ -3,7 +3,7 @@ from Paciente import Paciente
 
 class Especialidade:
     def __init__(self,nomeclatura:str) -> None:
-        self.__nomeclatura= nomeclatura
+        self.__nomeclatura= nomeclatura.upper()
         self.__listaEspera= Lista()
     
     @property
