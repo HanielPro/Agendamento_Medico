@@ -51,8 +51,6 @@ class Consultorio:
         s+=str(self.__Especialidades)
         s+='\n'
         return s
-
-    
     
     def verificarEspecialidade(self,key:any)->bool: #Confere se existe uma determinada especialidade no hospital         
         return self.__Especialidades.autenticarChave(key)
@@ -102,7 +100,7 @@ class Consultorio:
         try:
             self.__Medicos.removerNo(key)
             print('\033[31m'+'O médico com o id ',key,' foi demitido'+'\033[0;0m')
-        except Exception as E:
+        except Exception:
             raise ClinicException(2,'MEDIC NOT FOUND')
             
             
@@ -110,6 +108,10 @@ class Consultorio:
         return str(self.__Medicos)
     
     #== == == -- Metodos relacionados ao paciente
+    '''
+    def inserirPaciente(self, paciente:Paciente):
+        self.__Pacientes.InserirNode(paciente.cpf,paciente)# Por fim, adiciona ele na lista dos pacientes do hospital
+    '''
     
     def inserirPaciente(self,cpf:int,nome:str,especialidade:str,gravidade:str):    
 

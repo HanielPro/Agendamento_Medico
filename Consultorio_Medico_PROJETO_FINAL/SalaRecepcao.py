@@ -4,7 +4,7 @@ from Consultorio import Consultorio,ClinicException
 
 class SalaRecepcao():
     
-    def __init__(self,consultorio:Consultorio):
+    def __init__(self,consultorio:Consultorio=None):
         self.__listaAguardo= Lista()
         self.__consultorio= consultorio
     
@@ -41,6 +41,16 @@ class SalaRecepcao():
         self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
         return '+OK PATIENT REMOVED'
     
+    
+    #== == Esta função remove permanentemente o paciente da lista de aguardo da Sala de Recepção    
+    def consultarPaciente(self,cpf:str)->str:
+        '''Obtem a informação de um paciente através de seu cpf'''
+        posicao=self.__listaAguardo.busca(cpf)
+        
+        paciente=self.__listaAguardo.elemento(posicao)
+    
+        return str(paciente)
+    
     #== == Esta função remove permanentemente Todos os pacientes da lista de aguardo da Sala de Recepção
     def removerTodosPacientes(self):
         ''' Remove todos os pacientes da lista de aguardo'''
@@ -53,7 +63,7 @@ class SalaRecepcao():
         pacienteDespacho=self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
         try:
             #self.__consultorio.inserirPaciente(pacienteDespacho) #seria interessante enviar o objeto diretamente para o consultório ao invés de enviar os atributos.
-            self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho)
+            self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.stringuificarGravidade())
         except ClinicException as CE:
             return f'-ERR: OCURRIED THIS ERROR: {CE}'
         
@@ -61,16 +71,13 @@ class SalaRecepcao():
     #== == Esta função envia todos os pacientes da lista de aguardo da Sala de Recepção para o consultório
     def despacharTodosPacientes(self):
         '''Envia todos os pacientes da lista de aguardo para o consultório'''
-        
-        Allpatitent=self.__listaAguardo.esvazia()
-        
-        for pacienteDespacho in Allpatitent:
-            try:
-                #self.__consultorio.inserirPaciente.inserirPaciente(i) #método que envia um objeto
-                self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.stringuificarGravidade())
+        try:
+            while not(self.__listaAguardo.estaVazia()):
+                pacienteParaDespachar=self.__listaAguardo.elemento(1)
+                self.despacharPaciente(pacienteParaDespachar.cpf)
     
-            except ClinicException as CE:
-                return f'-ERR: OCURRIED THIS ERROR: {CE}'
+        except ClinicException as CE:
+            return f'-ERR: OCURRIED THIS ERROR: {CE}'
     
     
     # !! !! !! !! Esses métodos estão dentro da Sala de espera mas não deveriam está aqui.
