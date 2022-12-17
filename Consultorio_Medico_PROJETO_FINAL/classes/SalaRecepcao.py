@@ -1,12 +1,12 @@
 from EstruturasDeDados.Lista.ListaEncadeada import *
 from Paciente import Paciente
-from Consultorio import Consultorio,ClinicException,consultorio1
+#from Consultorio import Consultorio,ClinicException,consultorio1
 
 class SalaRecepcao():
     
-    def __init__(self,consultorio:Consultorio=consultorio1):
+    def __init__(self):
         self.__listaAguardo= Lista()
-        self.__consultorio= consultorio
+        #self.__consultorio= consultorio
     
     def __str__(self) -> str:
         return str(self.__listaAguardo)
@@ -59,27 +59,38 @@ class SalaRecepcao():
     
     #== == Esta função envia um paciente da lista de aguardo da Sala de Recepção para o consultório
     
-    def despacharPaciente(self,cpf:str):
+    def despacharPaciente(self,cpf:str)->str:
         '''Envia um único paciente da lista de aguardo para o consultório'''
-        pacienteDespacho=self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
-        try:
+        
             #self.__consultorio.inserirPaciente(pacienteDespacho) #seria interessante enviar o objeto diretamente para o consultório ao invés de enviar os atributos.
-            self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.stringuificarGravidade())
+            #self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.stringuificarGravidade())
+        
+        pacienteDespacho=self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
+        
+        nome=pacienteDespacho.nome.split()
+        nome='#'.join(nome)
+        return f'{pacienteDespacho.cpf}/{nome}/{pacienteDespacho.especialidadeDesejada}/{pacienteDespacho.stringuificarGravidade()}'
+            
+        '''
         except ClinicException as CE:
             return f'-ERR: OCURRIED THIS ERROR: {CE}'
-        
+        '''
     
     #== == Esta função envia todos os pacientes da lista de aguardo da Sala de Recepção para o consultório
-    def despacharTodosPacientes(self):
-        '''Envia todos os pacientes da lista de aguardo para o consultório'''
-        try:
-            while not(self.__listaAguardo.estaVazia()):
-                pacienteParaDespachar=self.__listaAguardo.elemento(1)
-                self.despacharPaciente(pacienteParaDespachar.cpf)
-    
-        except ClinicException as CE:
-            return f'-ERR: OCURRIED THIS ERROR: {CE}'
-    
+    def despacharTodosPacientes(self)->str:
+        '''Retorna uma lista contendo todos os pacientes da lista de aguardo'''
+
+        todosPacienteParaDespachar=[]
+        while not(self.__listaAguardo.estaVazia()):
+            
+            pacienteParaDespachar=self.__listaAguardo.elemento(1)
+            
+            pacienteParaDespachar=self.despacharPaciente(pacienteParaDespachar.cpf)
+            
+            todosPacienteParaDespachar.append(pacienteParaDespachar)
+        
+        return ' '.join(todosPacienteParaDespachar)
+
     
     # !! !! !! !! Esses métodos estão dentro da Sala de espera mas não deveriam está aqui.
     def consultarConsutorio(self):
@@ -116,9 +127,9 @@ if __name__=='__main__':
     print(sala1)
     input('removido todos pacientes....')
     '''
-    sala1.despacharTodosPacientes()
+    print(sala1.despacharPaciente('12321313356'))
+    print(sala1.despacharTodosPacientes())
     print(sala1)
     input('Mostrando as informações do consultório')
 
     #-- -- Testando o consultorio
-    print(sala1.consultarConsutorio())

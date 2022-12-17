@@ -182,7 +182,29 @@ class ArvoreBusca:
         
         elif key < node.key:  #se a chave não está a esquerda, então testa se está a direita
             return self.__busca(key, node.esq)
+        
+    def elemento(self,key:any):
+        try:
+            assert not(self.estaVazia())
+        
+            return self.__elemento(key,self.__raiz)
+        
+        except AssertionError:
+            raise SearchArborException(1,'NO ROOT!')
     
+    def __elemento(self,key:any,node:Node):     
+        if node==None: # chegou ao final da sub-árvore
+            return -1
+        
+        elif node.key==key: #testa se esta é a chave 
+            return node.carga 
+        
+        elif key < node.key:  #testa se a chave está a esquerda do nó
+            return self.__busca(key, node.esq)
+        
+        elif key < node.key:  #se a chave não está a esquerda, então testa se está a direita
+            return self.__busca(key, node.esq)
+        
     #== == == Método para remover Nós em uma árvore de busca
 
     def removerNo(self,key:any)->any:

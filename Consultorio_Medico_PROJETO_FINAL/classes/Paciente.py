@@ -102,7 +102,6 @@ class Paciente:
         cpfConjunto=[]
         cpf=self.__cpf
         
-        '''012.345678911'''
         for i in range(len(cpf)):
         
             if i ==2 or i==5:

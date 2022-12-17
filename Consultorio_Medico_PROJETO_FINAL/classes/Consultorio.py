@@ -105,15 +105,17 @@ class Consultorio:
     def exibirMedicos(self): #Método que mostra todos os Médicos no consultório
         return str(self.__Medicos)
     
-    #== == == -- Metodos relacionados ao paciente
-    '''
-    def inserirPaciente(self, paciente:Paciente):
+    def ConsultarMedico(self,key): #Método que mostra todos os Médicos no consultório
+        try:
+            return self.__Medicos.elemento(key)
+        
+        except SearchArborException as SAE:
+            raise ClinicException(0,SAE)
 
-        self.__Pacientes.InserirNode(paciente.cpf,paciente)# Por fim, adiciona ele na lista dos pacientes do hospital
-
-    '''
     
-    def inserirPaciente(self,cpf:int,nome:str,especialidade:str,gravidade:str):
+    #== == == -- Metodos relacionados ao paciente
+    
+    def inserirPaciente(self,cpf:str,nome:str,especialidade:str,gravidade:str):
 
         if not(self.verificarEspecialidade(especialidade)):#Primeiro, checa se a especialidade  que deseja inserilo existe
             raise ClinicException(3,'SPECIALITY NOT FOUND')
@@ -142,12 +144,20 @@ class Consultorio:
             raise ClinicException(0,SAE)
          
 
-    def exibirPacientes(self): #Método que mostra todos os pacientes no consultório
+    def exibirPacientes(self)->str: #Método que mostra todos os pacientes no consultório
+        '''Retorna uma string contendo a informação de todos os paciente'''
         self.mutexPaciente.acquire()
         pacientes=str(self.__Pacientes)
         self.mutexPaciente.release()
         return pacientes
-
+    
+    def ConsultarPaciente(self,key) ->Paciente: #Método que mostra todos os Médicos no consultório
+        '''Retorna um Paciente, através da chave'''
+        try:
+            return self.__Pacientes.elemento(key)
+        
+        except SearchArborException as SAE:
+            raise ClinicException(0,SAE)
     #== == == -- Métodos para solucionar problemas
     
     def __gerarID(self,nome:str,type:str)-> str: # a função gera um id aleatório e confirma se n existe na estrutura de dados 5 vezes
