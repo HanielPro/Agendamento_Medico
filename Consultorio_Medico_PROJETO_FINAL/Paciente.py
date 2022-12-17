@@ -97,9 +97,23 @@ class Paciente:
         peso= self.__TraducoesPesosGravidade.get(str(self.__gravidadePeso))
         return peso
     
-    
+    def transalteCPF(self)->str:
+        '''Este método é para transformar uma cadeia de caractéres em um conjunto'''
+        cpfConjunto=[]
+        cpf=self.__cpf
         
+        '''012.345678911'''
+        for i in range(len(cpf)):
+        
+            if i ==2 or i==5:
+                cpfConjunto.append( f'{cpf[i]}.')
+            elif i==8:
+                cpfConjunto.append( f'{cpf[i]}-')
+            else:
+                cpfConjunto.append(cpf[i])       
+        
+        return ''.join(cpfConjunto)      
     
     def __str__(self) -> str:
-        return f'cpf: {self.__cpf}| Nome: {self.__nome}| Desejo: {self.__especialidadeDesejada}| Gravidade: {self.__TraducoesPesosGravidade[str(self.__gravidadePeso)]}'
+        return f'cpf: {self.transalteCPF()}| Nome: {self.__nome}| Desejo: {self.__especialidadeDesejada}| Gravidade: {self.__TraducoesPesosGravidade[str(self.__gravidadePeso)]}'
     

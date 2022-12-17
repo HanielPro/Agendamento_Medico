@@ -1,10 +1,10 @@
 from EstruturasDeDados.Lista.ListaEncadeada import *
-from Paciente import *
-from Consultorio import Consultorio,ClinicException
+from Paciente import Paciente
+from Consultorio import Consultorio,ClinicException,consultorio1
 
 class SalaRecepcao():
     
-    def __init__(self,consultorio:Consultorio=None):
+    def __init__(self,consultorio:Consultorio=consultorio1):
         self.__listaAguardo= Lista()
         self.__consultorio= consultorio
     
@@ -20,6 +20,7 @@ class SalaRecepcao():
     
     #== == Este método deverá retornar a posição da lista de aguardo o paciente deverá ser inserido. O índice é gerado a partir da gravidade do tal.
     #-- -- Na dúvida, cheque o dicionário de gravidades do cliente
+    
     def __checarPosicaoPorGravidade(self,paciente:Paciente,posicaoAtual:int) -> int:
         '''
         Melhor Caso é quando a lista vazia ou a primeira posição é a certa: O(1)
@@ -87,21 +88,7 @@ class SalaRecepcao():
     
 if __name__=='__main__':
 
-    consu1=Consultorio()
-    consu1.inserirEspecilidade('Clinica Geral')
-    consu1.inserirEspecilidade('Pediatria')
-    consu1.inserirEspecilidade('Oftalmologia')
-    consu1.inserirEspecilidade('Psiquiatria')
-    consu1.inserirEspecilidade('Cirurgia Geral')
-    
-    consu1.inserirMedico('Carlinhos Maia','Psiquiatria')
-    consu1.inserirMedico('Ian Ribeiro','Pediatria')
-    consu1.inserirMedico('Luis Kilmer Inacio da Silva','Pediatria')
-    consu1.inserirMedico('Marcos Mion','Oftalmologia')
-    consu1.inserirMedico('Gabriel Araujo','Cirurgia Geral')
-    consu1.inserirMedico('Paula Tejano','Clinica Geral')
-
-    sala1=SalaRecepcao(consu1)
+    sala1=SalaRecepcao()
     sala1.ListarPaciente("34823019705","Joaseiro da Costa","Pediatria","L2")
     sala1.ListarPaciente("56567424223","Pedro Neto SIlveira","Psiquiatria","G")
     sala1.ListarPaciente("12321313323","Rogerio SIlveira","Pediatria","M2")

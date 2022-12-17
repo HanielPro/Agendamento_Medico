@@ -46,7 +46,8 @@ class Lista:
             return self.__elemento(posicao,self.__NodeLeader.start)
 
         except AssertionError as AE:
-            raise ListaException(AE)
+            #raise ListaException(AE)
+            pass
     
     def __elemento(self, posicao:int, Node:Node) -> any:
         if posicao==1: # chegou na posição do Nó 

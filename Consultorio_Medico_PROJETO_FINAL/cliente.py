@@ -18,11 +18,14 @@ def clearConsole():
 
 #== ==Referente a execução das escolhas do usuário
 
+#== Caso o usuário Digite uma escolha indevida
 class MenuException(Exception):
     def __init__(self,code, msg) -> None:
         '''0: o usuário digitou algo fora da escolha.'''
         super().__init__(f'Menu Exception {code}: ', msg)
 
+
+#== 
 def ReceptionPage(choice):
     clearConsole()
     
@@ -63,7 +66,7 @@ def ReceptionPage(choice):
         
         confirmacao=str.upper(input('Confirm? (Y)  '))
         if confirmacao=='Y':   
-            Reception.removerTodosPacientes(cpf)
+            Reception.removerTodosPacientes()
             return True
         
     elif choice=='5':#'5':'SHOW A PATIENT',
@@ -87,14 +90,13 @@ def ReceptionPage(choice):
     print('option not realized...') #usuário desistiu da operação
     return True
 
-                
 
 def PrincipalPage(choice)->bool:
 
     global cursor
     
-    principalFlag=True
-    while principalFlag:
+    while True:
+        
         if choice=='-':
             clearConsole()
             print('Bye! Thank you for to use our code :)')
@@ -146,15 +148,15 @@ def PrincipalPage(choice)->bool:
         
         else:
             raise MenuException(0,'What did you say')
-                
 
+#== == == ==Variáveis
+#== == Dicionarío com as escolhas
 PrincipalDict={
     '1': 'GO TO RECEPTION MENU',
     '2':'GO TO CONSULTORY MENU',
     '3':'CONSULTORY METHOD MANU',
     '-':'..',
 }
-
 PrincipalDictKeys= list(PrincipalDict.keys())
 
 ReceptionDict={
@@ -165,7 +167,6 @@ ReceptionDict={
     '5':'SHOW A PATIENT',
     '-':'..',
 }
-
 ReceptionDictKeys= list(ReceptionDict.keys())
 
 ConsultoryManuDict={
@@ -180,13 +181,25 @@ ConsultoryManuDict={
     'QUIT': '[QUIT] |USE FOR QUIT OF THE CONSULTORY PROMPT|',
     '{-}':'..',
 }
-
 ConsultoryManuKeys= list(ConsultoryManuDict.keys())
+
 #== == == == inicialização do lado do cliente
-
 #== == ==Classe Sala Recepção
-
 Reception=SalaRecepcao()
+'''
+#Exemplos pronto
+'''
+Reception.ListarPaciente("34823019705","Joaseiro da Costa","Pediatria","L2")
+Reception.ListarPaciente("56567424223","Pedro Neto SIlveira","Psiquiatria","G")
+Reception.ListarPaciente("123.413.133-23","Rogerio SIlveira","Pediatria","M2")
+Reception.ListarPaciente("123.413.133-01","Paulo Florinopolis","Pediatria","G")
+Reception.ListarPaciente("153.783.108-20","Paulo Cantando","Pediatria","G")
+Reception.ListarPaciente("123.413.138-34","Paulo lanchando","Pediatria","L1")
+Reception.ListarPaciente("123.913.188-53","Paulo bebendo","Pediatria","L1")
+Reception.ListarPaciente("123.413.138-72","Paula Sorrino","Pediatria","L1")
+Reception.ListarPaciente("123.413.166-51","Paulo Subindo","Psiquiatria","G")
+Reception.ListarPaciente("123.415.123-03","Paulo Chorando","Pediatria","G")
+Reception.ListarPaciente("123.243.133-56","Paula Equinó","Pediatria","L1")
 
 #== == == SOCKET
 HOST = 'localhost'
@@ -207,7 +220,7 @@ while flag:
         print(separador)
         MostrarDicionario(PrincipalDict,PrincipalDictKeys)
         
-        flag=PrincipalPage(PrincipalPage(input(cursor)))
+        flag=PrincipalPage(input(cursor))
         
         #-- -- -- Reception Page option
                     

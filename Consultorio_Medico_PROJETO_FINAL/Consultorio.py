@@ -1,10 +1,10 @@
 from EstruturasDeDados.Lista.ListaEncadeada import *
 from EstruturasDeDados.Arvore.ArvoreBusca import *
-from Medico import *
-from Paciente import *
-from Especialidade import *
+from Medico import Medico
+from Paciente import Paciente
+from Especialidade import Especialidade
 import random
-
+from threading import Semaphore
 from unicodedata import normalize #!! !! !! !! Precisa importar a biblioteca unide code:  $pip install unidecode
 
 
@@ -31,8 +31,7 @@ class Consultorio:
         self.__Especialidades=Lista() #possui uma lista com todas as especialidades
         self.__Pacientes=ArvoreBusca()#possui uma Arvore de busca com todos pacientes
         self.__Medicos= ArvoreBusca()# possui uma Arvore de busca com todos os médicos
-        #self.idcounter=list()
-        #self.__IndexEspecialidades=Lista()#index para as especialidades
+        self.mutexPaciente=Semaphore(1)
     
     #== == == -- Métodos Relacionados Com A Especialidade
     
@@ -57,7 +56,7 @@ class Consultorio:
     
     def inserirEspecilidade(self,nomeclatura:str)->None: # Insere uma especialidade na Lista de especialidades na clínica
         try:
-            newEspeciality = Especialidade(nomeclatura)
+            newEspeciality = Especialidade(str.upper(nomeclatura))
             self.__Especialidades.inserir(nomeclatura.upper(), newEspeciality) # por enquanto, a chave será o próprio nome da lista
 
         except ListaException as LE:
@@ -72,7 +71,6 @@ class Consultorio:
             raise ClinicException(0,LE)
          
     def captarEspecialidade(self,key:any)->Especialidade:# Retorna uma especialidade  contida na Lista de especialidades
-
         try:
             posicao=self.__Especialidades.busca(key)
             return self.__Especialidades.elemento(posicao)
@@ -86,7 +84,7 @@ class Consultorio:
    
             especialidadeCheck= self.captarEspecialidade(especialidadeMedica.upper())
                      
-            NewMedic=Medico(id,nome.upper(),especialidadeCheck)
+            NewMedic=Medico(id,nome.upper(),especialidadeCheck,self)
             
             self.__Medicos.InserirNode(id,NewMedic)
 
@@ -110,37 +108,45 @@ class Consultorio:
     #== == == -- Metodos relacionados ao paciente
     '''
     def inserirPaciente(self, paciente:Paciente):
+
         self.__Pacientes.InserirNode(paciente.cpf,paciente)# Por fim, adiciona ele na lista dos pacientes do hospital
+
     '''
     
-    def inserirPaciente(self,cpf:int,nome:str,especialidade:str,gravidade:str):    
+    def inserirPaciente(self,cpf:int,nome:str,especialidade:str,gravidade:str):
 
         if not(self.verificarEspecialidade(especialidade)):#Primeiro, checa se a especialidade  que deseja inserilo existe
             raise ClinicException(3,'SPECIALITY NOT FOUND')
-       
+        
+        self.mutexPaciente.acquire()
         especialidadeListaEspera= self.captarEspecialidade(especialidade)# Depois, Busca a especialidade no qual o paciente será inserido
          
         NewPaciente=Paciente(cpf,nome,especialidade,gravidade) #Adiciona os pacientes na arvóre de pacientes
-        
+
         especialidadeListaEspera.inserirPaciente(cpf,NewPaciente) #Adiciona o paciente na Lista da especialidade que ele deseja
         self.__Pacientes.InserirNode(cpf,NewPaciente)# Por fim, adiciona ele na lista dos pacientes do hospital 
-    
+        self.mutexPaciente.release()
+        return '+Ok'
     
     def removerPaciente(self,key:any)->Paciente:
         '''Não funciona se o paciente estiver sendo atendido.'''
         try:
-            
+            self.mutexPaciente()
             pacienteRemover=self.__Pacientes.removerNo(key) # Remove o paciente do consultório e faz a coleta do objeto             
             especialidadePaciente=self.captarEspecialidade(pacienteRemover.especialidadeDesejada)#em seguida, obtem qual a especialidade ele está inserido.
             especialidadePaciente.RemoverPaciente(key) #Por fim, remove ele da fila de espera
-            
-            print('\033[31m'+'O paciente com o id ',key,'foi removido (não se sabe as causas)'+'\033[0;0m')
+            self.mutexPaciente.release()
+            return '+Ok'
+
         except SearchArborException as SAE:
             raise ClinicException(0,SAE)
          
 
     def exibirPacientes(self): #Método que mostra todos os pacientes no consultório
-        return str(self.__Pacientes)
+        self.mutexPaciente.acquire()
+        pacientes=str(self.__Pacientes)
+        self.mutexPaciente.release()
+        return pacientes
 
     #== == == -- Métodos para solucionar problemas
     
@@ -184,9 +190,27 @@ class Consultorio:
             else: 
                 idGerado+=str(chr(random.randrange(65, 90)))
         
-        return idGerado
+        return idGerado        
             
-        #METODOS DE TESTES
+    '''
+    #METODOS DE TESTES
     def findthesmaller(self):
         self.__Medicos.smaller()
-        return ''
+        return ''  
+    '''
+consultorio1=Consultorio()
+consultorio1.inserirEspecilidade('Clinica Geral')
+consultorio1.inserirEspecilidade('Pediatria')
+consultorio1.inserirEspecilidade('Oftalmologia')
+consultorio1.inserirEspecilidade('Psiquiatria')
+consultorio1.inserirEspecilidade('Cirurgia Geral')
+consultorio1.inserirEspecilidade('Otorrinolaringologia')
+consultorio1.inserirEspecilidade('Endocrinologia')
+
+consultorio1.inserirMedico("Francis Bacon","Pediatria")
+consultorio1.inserirMedico("Alfandegario Nobrega","Psiquiatria")
+consultorio1.inserirMedico("Antony Nunes","Pediatria")
+consultorio1.inserirMedico("Luiz Chaves","Pediatria")
+consultorio1.inserirMedico("Jair Messias Bolsonaro","Psiquiatria")
+consultorio1.inserirMedico("Luís Inácio Lula","Endocrinologia")
+consultorio1.inserirMedico("Gustavo Wagner","Otorrinolaringologia")
