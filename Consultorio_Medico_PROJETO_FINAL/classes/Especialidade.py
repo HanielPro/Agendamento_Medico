@@ -2,6 +2,7 @@ from EstruturasDeDados.Lista.ListaEncadeada import *
 from Paciente import Paciente
 from threading import Semaphore
 
+
 class Especialidade:
     def __init__(self,nomeclatura:str) -> None:
         self.__nomeclatura= nomeclatura.upper()
@@ -27,7 +28,6 @@ class Especialidade:
         self.__patientMutex.release()
         self.__quantyPacientes.release()
         
-
     def RemoverPaciente(self,key): #Método que remove um paciente na lista de espera
         '''Remove um paciente da lista de espera'''
         #self.__quantyPacientes.acquire()

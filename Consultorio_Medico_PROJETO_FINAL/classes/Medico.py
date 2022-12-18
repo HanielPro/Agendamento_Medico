@@ -1,9 +1,10 @@
 import random
 import time
 #from Consultorio import Consultorio
-from Especialidade import Especialidade
+#from Especialidade import Especialidade
 from threading import Thread
 from Paciente import Paciente
+#from Consultorio import Consultorio
 
 class MedicException(Exception):
     def __init__(self,code,msg) -> None:
@@ -12,9 +13,8 @@ class MedicException(Exception):
 
 class Medico:
     
-    def __init__(self,matricula,nome:str,especialidade:Especialidade, consultorio) -> None:
+    def __init__(self,matricula,nome:str,especialidade, consultorio) -> None:
         
-        #assert ConsultasIntervalo >= 30 and ConsultasIntervalo<=150 , MedicException('INVALID TIME FOR A EXAM')
         self.__matricula=matricula
         self.__nome=nome.upper()
         self.__especialidade=especialidade
@@ -23,7 +23,6 @@ class Medico:
         self.consultar=Thread(target=self.BuscarPaciente)
         self.consultar.start()
 
-    
     @property
     def nome(self):
         return self.__nome
@@ -37,7 +36,7 @@ class Medico:
         return self.__especialidade
     
     @especialidade.setter
-    #== == == Só insere se a especialidade estiver na lista de especialidades do hospital
+    #== == == Só insere se a especialidade estiver na lista de especialidades no consultório
     def especialidade(self,especialidade):
         #assert especialidade in Hospital.especialidadesLista, MedicException('SPECIALTY NOT REGISTERED IN HOSPITAL')
         self.__especialidade=especialidade
