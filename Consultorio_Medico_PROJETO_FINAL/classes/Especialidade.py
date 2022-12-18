@@ -18,19 +18,19 @@ class Especialidade:
         return self.__listaEspera
     
     def inserirPaciente(self,key:any,paciente:Paciente): #Método que insere um paciente na lista de espera
-        
+        '''Insere um paciente na lista de espera'''
         self.__patientMutex.acquire()
 
         posicao=self.__checarPosicaoPorGravidade(paciente,1)
         self.__listaEspera.inserir(key,paciente,posicao)
         
+        self.__patientMutex.release()
         self.__quantyPacientes.release()
         
-        self.__patientMutex.release()
 
     def RemoverPaciente(self,key): #Método que remove um paciente na lista de espera
-        
-        self.__quantyPacientes.acquire()
+        '''Remove um paciente da lista de espera'''
+        #self.__quantyPacientes.acquire()
         self.__patientMutex.acquire()
 
         posicao=self.__listaEspera.busca(key)
@@ -39,6 +39,7 @@ class Especialidade:
         return paciente
     
     def RemoverPrimeiroPaciente(self)->Paciente:
+        
         '''Remove o primeiro paciente da lista de espera'''
         self.__quantyPacientes.acquire()
         self.__patientMutex.acquire()

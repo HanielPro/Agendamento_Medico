@@ -6,8 +6,9 @@ from threading import Thread
 from Paciente import Paciente
 
 class MedicException(Exception):
-    def __init__(self,msg) -> None:
-        super().__init__(f'MEDIC EXCEPTION: {msg}')
+    def __init__(self,code,msg) -> None:
+        '''1: Entrada de dados inválida'''
+        super().__init__(f'MEDIC EXCEPTION {code}: {msg}')
 
 class Medico:
     
@@ -51,7 +52,7 @@ class Medico:
             assert novoIntervalo>=1 and type(novoIntervalo)==int
             self.__ConsultasIntervalo=novoIntervalo
         except AssertionError:
-            raise MedicException('INVALID ENTERED TIME')
+            raise MedicException(1,'INVALID ENTERED TIME')
 
     
     #== == == -- Metodos do Médico

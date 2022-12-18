@@ -35,21 +35,26 @@ O consultório será o servidor. Nele há diferentes especialidades médicas, es
 #### Básico
 - [x] Estruturar as Ideias
 - [x] Construir todas classes principais para o programa
+- [x] verificação das entradas de dados vindas do clientes 
 - [ ] Enviar os Pacientes da Sala de Espera para o Consultório
 - [x] Programa Princial
 
 #### PIRC
 - [x] Discutir a respeito de quem será o Cliente
 - [x] Discutir a respeito de quem será o Servidor
+- [x] Definir os métodos do Protocolo de aplicação
 - [ ] Construir A parte do Cliente
 - [ ] Construir A parte do Servidor
 
 #### Estrutura de Dados
 - [x] Criar um gerenciador de Tratamento de Erros 
-- [ ] Conservar a execução do Programa ao ocorrer um Erro  
+- [x] Conservar a execução do Programa ao ocorrer um Erro  
 - [x] Discutir a respeito de quais Estruturas de Dados utilizar
-- [x] Construir a classe Cliente
-- [x] Construir a classe Consultório
+- [x] Construir a classe SALA DE ESPERA
+- [x] Construir a classe CONSULTÓRIO
+- [x] Construir a classe PACIENTE
+- [x] Construir a classe MÉDICO
+- [x] Construir a classe ESPECIALIDADE
 - [x] Incluir as Estruturas de Dados ao programa
 
 #### Sistemas Operacionais
@@ -57,5 +62,8 @@ O consultório será o servidor. Nele há diferentes especialidades médicas, es
 - [x] Discutir a respeito de prioridades
 - [x] Discutir a respeito da zona crítica
 - [x] Adicionar as Threads
-- [x] Adicionar prioridades
+- [ ] Checar se as Threads estão executando corretamente
+- [x] Adicionado prioridades
+- [ ] Checar se as Prioridades está funcionando estão executa ndo corretamente
 - [x] Adicionar a Exclussão Mútua
+- [ ] Checar se a Exclussão Mútua está funcionando estão executa ndo corretamente

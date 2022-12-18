@@ -3,7 +3,7 @@ class SearchArborException(Exception):
         #-- -- Codes Error
         # 1, The arbor is empty
     def __init__(self, code, msg) -> None:
-        super().__init__(f'Binary Arbor Exception {code}: ', msg)
+        super().__init__(f'Binary Arbor Exception {code}: {msg}')
 
 #== == == ==Criador da Exceções dos Nós
 

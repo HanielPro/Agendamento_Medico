@@ -18,7 +18,7 @@ class ClinicException(Exception):
         3: Foi inserida uma especialidade que não foi cadastrada na clínica.
     '''
     def __init__(self, code:int, msg:str) -> None:
-        super().__init__(f'Clinic Exception {code}: ', msg)
+        super().__init__(f'Clinic Exception {code}: {msg}')
         
 
 class Consultorio:   
@@ -59,7 +59,7 @@ class Consultorio:
             newEspeciality = Especialidade(str.upper(nomeclatura))
             self.__Especialidades.inserir(nomeclatura.upper(), newEspeciality) # por enquanto, a chave será o próprio nome da lista
 
-        except ListaException as LE:
+        except ListException as LE:
             raise ClinicException(0,LE)
     
     def removerEspecialidade(self,key:any)->None:# Remove uma especialidade na Lista de especialidades na clínica
@@ -67,14 +67,14 @@ class Consultorio:
         try:
             posicao=self.__Especialidades.busca(key)
             self.__Especialidades.remover(posicao)
-        except ListaException as LE:
+        except ListException as LE:
             raise ClinicException(0,LE)
          
     def captarEspecialidade(self,key:any)->Especialidade:# Retorna uma especialidade  contida na Lista de especialidades
         try:
             posicao=self.__Especialidades.busca(key)
             return self.__Especialidades.elemento(posicao)
-        except ListaException as LE:
+        except ListException as LE:
             raise ClinicException(0,LE)
         
     #== == == -- Métodos relacionados ao Médico    

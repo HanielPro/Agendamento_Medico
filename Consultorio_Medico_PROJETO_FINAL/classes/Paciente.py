@@ -1,8 +1,10 @@
-class PacientException(Exception):
+class PatientException(Exception):
+    '''
+        1: O CPF inserido não possui a quantidade permitidade de caracteres numéricos
+        2: A gravidade Inserida não está contida no dicionário.
+    '''
     def __init__(self, code:int, msg) -> None:
-        #1: O CPF inserido não possui a quantidade permitidade de caracteres numéricos
-        #2: A gravidade Inserida não está contida no dicionário.
-        super().__init__(f'PACIENT EXCEPTION {code}: {msg}')
+        super().__init__(f'PATIENT EXCEPTION {code}: {msg}')
 
 
 class Paciente:
@@ -22,16 +24,14 @@ class Paciente:
     }
         
     def __init__(self,cpf:str, nome:str, especialidadeDesejada:str, gravidade:str) -> None:
-        try:self.__cpf= self.validarCPF(cpf)
-        except: raise PacientException(1,'INVALID CPF ASSIGNMENT')
 
+        self.__cpf= self.validarCPF(cpf)
         self.__nome=nome.upper()
         self.__especialidadeDesejada=especialidadeDesejada.upper()
         self.__gravidadePeso=self.__gravidadeValores.get(gravidade)
         if self.__gravidadePeso==None:
-            raise PacientException(2,'iNVALIDY GRAVITY ENTRY')
-        
-    
+            raise PatientException(2,'INVALIDY GRAVITY ENTRY')  
+
     def __eq__(self, __outroPaciente: object) -> bool:
         if isinstance(__outroPaciente,Paciente):
             return self.__gravidadePeso == __outroPaciente.gravidadePeso
@@ -71,16 +71,22 @@ class Paciente:
     
     #==  == Responsável por checar se o CPF é válido   
     def validarCPF(self,cpf:str):
-        if len(cpf)==14: # Se for 14 caractéres, removerá os pontos e hífens. 
-            cpf=cpf.replace('-','')
-            cpf=cpf.replace('.','')
-        assert len(cpf)== 11 # Primeiro checa o tamanho do cpf
+        '''Verifica se o CPF inserido  É coerente'''
+        try:
+            if len(cpf)>11: # Se for acima de11 caractéres, removerá os pontos e hífens. 
+                cpf=cpf.replace('-','')
+                cpf=cpf.replace('.','')
+            assert len(cpf)== 11 #Primeiro checa o tamanho do cpf
+            
+            if self.__validarCPF(cpf):#Checará se todos os caractéres são dígitos
+                return cpf
+            
+            else:
+                raise PatientException(1,'INVALID CPF ASSIGNMENT')
         
-        if self.__validarCPF(cpf):#Checará se todos os caractéres são dígitos
-            return cpf
-        else:
-            raise Exception('INVALID CPF')
-    
+        except AssertionError:
+            raise PatientException(1,'INVALID CPF ASSIGNMENT')  
+        
     #==  == Verifica quais foram os caractéres inseridos no cpf, precisa checar se de fat
     def __validarCPF(self,cpf:str)->bool:
         
@@ -93,12 +99,13 @@ class Paciente:
         return False # o caractere não era um número
         
     
-    def stringuificarGravidade(self):
+    def stringuificarGravidade(self)->str:
+        '''Transforma o peso da gravidade na String Original'''
         peso= self.__TraducoesPesosGravidade.get(str(self.__gravidadePeso))
         return peso
     
     def transalteCPF(self)->str:
-        '''Este método é para transformar uma cadeia de caractéres em um conjunto'''
+        '''Este método serve para transformar uma cadeia de números de CPF,  e transforma em um CPF com sinais'''
         cpfConjunto=[]
         cpf=self.__cpf
         
@@ -114,5 +121,5 @@ class Paciente:
         return ''.join(cpfConjunto)      
     
     def __str__(self) -> str:
-        return f'cpf: {self.transalteCPF()}| Nome: {self.__nome}| Desejo: {self.__especialidadeDesejada}| Gravidade: {self.__TraducoesPesosGravidade[str(self.__gravidadePeso)]}'
+        return f'cpf: {self.transalteCPF()}| Nome: {self.__nome}| Desejo: {self.__especialidadeDesejada}| Gravidade: {self.stringuificarGravidade()}'
     

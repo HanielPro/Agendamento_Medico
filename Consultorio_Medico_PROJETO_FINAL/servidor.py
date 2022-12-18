@@ -1,6 +1,6 @@
 from classes.Consultorio import Consultorio, ClinicException
 import socket
-from threading import Thread, Semaphore
+#from threading import Thread, Semaphore
 
 class ServerException(Exception):
 

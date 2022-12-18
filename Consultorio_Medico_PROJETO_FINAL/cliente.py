@@ -1,12 +1,11 @@
-from classes.SalaRecepcao import SalaRecepcao
+from classes.SalaRecepcao import SalaRecepcao, ReceptionException
 import socket
-from  time import sleep
 import os 
-#from Menus import *
 
 def MostrarDicionario(dicionario:dict,dictionaryKeys:list[str]):
+    '''Recebe um dicionário e um array com chaves para poder mostrar na tela as chaves e os seus valores'''
     for i in range(len(dictionaryKeys)):
-        print(f'\n[{dictionaryKeys[i]:^5}] => {dicionario.get(dictionaryKeys[i]):^5} ')
+        print(f'\n[{dictionaryKeys[i]:^10}] => {dicionario.get(dictionaryKeys[i]):^10}')
 
 
 def clearConsole():
@@ -22,77 +21,83 @@ def clearConsole():
 class MenuException(Exception):
     def __init__(self,code, msg) -> None:
         '''0: o usuário digitou algo fora da escolha.'''
-        super().__init__(f'Menu Exception {code}: ', msg)
-
+        super().__init__(f'Menu Exception {code}: {msg}')
 
 #== 
 def ReceptionPage(choice):
     clearConsole()
-    
-    if choice=='1': #'1': 'SHOW THE AWAITING LIST',
-        print('Showning Reception....')
-        print(Reception)
-        return True
-                    
-    elif choice=='2':#'2':'ADD A PATIENT INTO THE AWAITING LIST',
-        print('Adding a new Patient....')
+    try:
+        if choice=='1': #'1': 'SHOW THE AWAITING LIST',
+            print('Showning Reception....')
+            print(Reception)
+            return True
+                        
+        elif choice=='2':#'2':'ADD A PATIENT INTO THE AWAITING LIST',
+            print('Adding a new Patient....')
 
-        cpf=input('Insert him CPF=>  ')
-        name=str.upper(input('Insert him name=>  ') )
-        speciality=str.upper(input('Insert him ndesired speciality=>  ') )
-        gravity=str.upper(input('Insert him gravity=>  ') )
+            cpf=input('Insert him CPF=>  ')
+            name=str.upper(input('Insert him name=>  ') )
+            speciality=str.upper(input('Insert him ndesired speciality=>  ') )
+            gravity=str.upper(input('Insert him gravity=>  ') )
+            
+            print(f'\n CPF: {cpf} \n Name: {name}\nDesired specialty: {speciality} \n Gravity: {gravity}\n')
+            
+            confirmacao=str.upper(input('Confirm? (Y)  '))
+            if confirmacao=='Y':
+                Reception.ListarPaciente(cpf,name,speciality,gravity)
+                return True
+            
         
-        print(f'\n CPF: {cpf} \n Name: {name}\nDesired specialty: {speciality} \n Gravity: {gravity}\n')
+        elif choice=='3':#'3':'REMOVE A PATIENT OF THE AWAITING LIST'
+            print(Reception)
+            print('Removing a Patient....')
+            cpf=input('Insert him CPF=>  ')
+            
+            print(f'\n CPF: {cpf}\n')
+            confirmacao=str.upper(input('Confirm? (Y)  '))
+            if confirmacao=='Y':   
+                Reception.removerPaciente(cpf)
+                return True
+            
+        elif choice=='4':#'4':'REMOVE ALL PATIENT OF THE AWAITING LIST'
+            print('Removing All Patient....')
+            
+            confirmacao=str.upper(input('Confirm? (Y)  '))
+            if confirmacao=='Y':   
+                Reception.removerTodosPacientes()
+                return True
+            
+        elif choice=='5':#'5':'SHOW A PATIENT',
+            print(Reception)
+            print('Showning a Patient....')
+            cpf=input('Insert him CPF=>  ')
+            
+            print(f'\n CPF: {cpf}\n')
+            confirmacao=str.upper(input('Confirm? (Y)  '))
+            if confirmacao=='Y':   
+                print(Reception.consultarPaciente(cpf))
+                return True
+            
+        elif choice=='-': #'-':'..'
+            print('Quiting of Recption Menu....')
+            return False
         
-        confirmacao=str.upper(input('Confirm? (Y)  '))
-        if confirmacao=='Y':
-            Reception.ListarPaciente(cpf,name,speciality,gravity)
-            return True
+        else:
+            raise MenuException(0,'What did u say?! ')
         
-    
-    elif choice=='3':#'3':'REMOVE A PATIENT OF THE AWAITING LIST'
-        print(Reception)
-        print('Removing a Patient....')
-        cpf=input('Insert him CPF=>  ')
+        #print(f'{separador}\nSucess!')
         
-        print(f'\n CPF: {cpf}\n')
-        confirmacao=str.upper(input('Confirm? (Y)  '))
-        if confirmacao=='Y':   
-            Reception.removerPaciente(cpf)
-            return True
+    except MenuException as ME:
+        print(ME)
+    except ReceptionException as RE:
+        print(RE)
         
-    elif choice=='4':#'4':'REMOVE ALL PATIENT OF THE AWAITING LIST'
-        print('Removing All Patient....')
-        
-        confirmacao=str.upper(input('Confirm? (Y)  '))
-        if confirmacao=='Y':   
-            Reception.removerTodosPacientes()
-            return True
-        
-    elif choice=='5':#'5':'SHOW A PATIENT',
-        print(Reception)
-        print('Showning a Patient....')
-        cpf=input('Insert him CPF=>  ')
-        
-        print(f'\n CPF: {cpf}\n')
-        confirmacao=str.upper(input('Confirm? (Y)  '))
-        if confirmacao=='Y':   
-            print(Reception.consultarPaciente(cpf))
-            return True
-        
-    elif choice=='-': #'-':'..'
-        print('Quiting of Recption Menu....')
-        return False
-    
-    else:
-        raise MenuException(0,'What did u say?! ')
-    
     print('option not realized...') #usuário desistiu da operação
     return True
 
 
 def PrincipalPage(choice)->bool:
-
+    
     global cursor
     
     while True:
@@ -115,7 +120,7 @@ def PrincipalPage(choice)->bool:
                 MostrarDicionario(ReceptionDict,ReceptionDictKeys)
                 receptionFlag=ReceptionPage(input(cursor))
                 if receptionFlag==True:
-                    input('Sucess!')
+                    input(f'\n {separador1} Press Enter {separador2}\n')
 
         elif choice=='2':#======= para implementar
             choice=''
@@ -131,21 +136,16 @@ def PrincipalPage(choice)->bool:
                 receptionFlag=ReceptionPage(input(cursor))
                 if receptionFlag==True:
                     input('Sucess!')
+                    
         elif choice=='3':
+            
+            clearConsole()
+
+            print(f'{separador1}Consultory Bash Manual{separador2}')
+
+            MostrarDicionario(ConsultoryManuDict,ConsultoryManuKeys)
+            input(f'{separador + separador}\nGOT IT! {cursor}')
             choice=''
-            receptionFlag=True
-            while receptionFlag:
-                
-                clearConsole()
-                print(separador)
-                print(f'{separador1}Consultory Bash Manual{separador2}')
-                print(separador)
-    
-                MostrarDicionario(ConsultoryManuDict,ConsultoryManuKeys)
-                receptionFlag=ReceptionPage(input(cursor))
-                if receptionFlag==True:
-                    input('Sucess!')
-        
         else:
             raise MenuException(0,'What did you say')
 
@@ -170,15 +170,14 @@ ReceptionDict={
 ReceptionDictKeys= list(ReceptionDict.keys())
 
 ConsultoryManuDict={
-    'INFORM':'[INFORM] "[SPECIALITY, SPECIALITY.NAME], [MEDIC, MEDIC.NAME], [PATIENT, PATIENT.CPF], DEFAULT=[CLINIC]" |USE TO GET INFORMATION OF THE CONSULTORY|',
+    'INFORM':'[INFORM] [[SPECIALITY] [SPECIALITY.NAME]], [[MEDIC] [MEDIC.NAME]], [[PATIENT], [PATIENT.CPF]], DEFAULT=[CLINIC]" |USE TO GET INFORMATION OF THE CONSULTORY|',
     
-    'DISPATCH':'[SEND] [PATIENT.CPF] |USE TO SEND ONE PATIENT OF THE AWAITING LIST TO THE CONSULTORY|',
-    'DISPATCHALL':'[SENDALL] |USE TO SEND ALL PATIENTS ON THE AWAITHING LIST TO THE CONSULTORY|',
+    'DISPATCH':'[DISPATCH] [PATIENT.CPF] |USE TO SEND ONE PATIENT OF THE AWAITING LIST TO THE CONSULTORY|',
+    'DISPATCHALL':'[DISPATCHALL] |USE TO SEND ALL PATIENTS ON THE AWAITHING LIST TO THE CONSULTORY|',
     
     'REMOVEPATIENT':'[REMOVEPATIENT] [PATIENT.CPF] |USE TO REMOVE ONE PATIENT OF THE CLINIC|',
     
     'QUIT': '[QUIT] |USE FOR QUIT OF THE CONSULTORY PROMPT|',
-    '{-}':'..',
 }
 ConsultoryManuKeys= list(ConsultoryManuDict.keys())
 

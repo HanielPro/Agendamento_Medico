@@ -1,11 +1,23 @@
-from EstruturasDeDados.Lista.ListaEncadeada import *
-from Paciente import Paciente
+if __name__!='__main__':
+    from classes.EstruturasDeDados.Lista.ListaEncadeada import Lista,ListException
+    from classes.Paciente import Paciente,PatientException
 #from Consultorio import Consultorio,ClinicException,consultorio1
 
+#== Caso o usuário Digite uma escolha indevida
+class ReceptionException(Exception):
+    def __init__(self,code, msg) -> None:
+        '''
+        0:Algo extraordinariamente extraordiordinário 
+        1: Foi fornecido dados insuficientes ou errados a respeito do Paciente [PATIENTEXCEPTION]   
+        2: Ocorreu algum erro ao inserir, remover ou consultar algum elemento na lista de aguardo [LISTEXCEPTION]
+        3: Ocorreu algum erro na entrada dos dados [RECEPTIONEXCEPTION]
+        '''
+        super().__init__(f'Reception Exception {code}: {msg}')
+        
 class SalaRecepcao():
-    
+    '''Apressenta todas os métodos e variáveis que o CLIENTE precisa.'''
     def __init__(self):
-        self.__listaAguardo= Lista()
+        self.__listaAguardo= Lista() #lista de Aguardo é onde os pacientes ficam localizados até serem chamados para entrar na área do consultório
         #self.__consultorio= consultorio
     
     def __str__(self) -> str:
@@ -13,16 +25,29 @@ class SalaRecepcao():
     
     #== == Esta função insere o paciente na lista de aguardo da Sala de Recepção
     def ListarPaciente(self,cpf:str, nome:str, especialidadeDesejada:str, gravidade:str)-> None:
-        newPaciente=Paciente(cpf,nome,especialidadeDesejada,gravidade)
-        posicao=self.__checarPosicaoPorGravidade(newPaciente,1) # a posição é gerada a partir de uma busca na lista pela menor prioridade
+        '''Adiciona um novo paciente a lista de espera'''
+        try:
+            
+            cpf=self.__translateCPF(cpf)
+            newPaciente=Paciente(cpf,nome,especialidadeDesejada,gravidade)
+            posicao=self.__checarPosicaoPorGravidade(newPaciente,1) # a posição é gerada a partir de uma busca na lista pela menor prioridade
+            self.__listaAguardo.inserir(cpf,newPaciente,posicao) 
+            return '+OK PATIENT INSERTED'
         
-        self.__listaAguardo.inserir(cpf,newPaciente,posicao) 
+        except PatientException as PE:
+            raise ReceptionException(1,f'INVALID DATA PROVIDED ABOUT THE PATIENT: \n{PE}')
+        
+        except ListException as LE:
+            raise ListException(2,f'SOMETHING DID WRONG WHEN I TRIED TO INSERT A PATIENT:\n{LE}')
     
     #== == Este método deverá retornar a posição da lista de aguardo o paciente deverá ser inserido. O índice é gerado a partir da gravidade do tal.
     #-- -- Na dúvida, cheque o dicionário de gravidades do cliente
     
     def __checarPosicaoPorGravidade(self,paciente:Paciente,posicaoAtual:int) -> int:
         '''
+        Esta função permite organizar os pacientes na listaAguardo a partir da gravidade. Segue um exemplo de como a lista ficaria:
+        G G G M2 M1 L2 L1 L1
+         
         Melhor Caso é quando a lista vazia ou a primeira posição é a certa: O(1)
         Maior parte dos caso quando a resposta está no meio da lista: O(N)
         Pior caso é quando a resposta está no final da lista: O(N)
@@ -39,17 +64,24 @@ class SalaRecepcao():
     #== == Esta função remove permanentemente o paciente da lista de aguardo da Sala de Recepção    
     def removerPaciente(self,cpf:str)->str:
         '''Remove um único paciente da lista de aguardo'''
-        self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
-        return '+OK PATIENT REMOVED'
+        try:
+            cpf= self.__translateCPF(cpf)
+            self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
+            return '+OK PATIENT REMOVED'
+        except ListException as LE:
+            raise ReceptionException(2,f'SOMETHING DID WRONG WHEN I TRIED TO REMOVE A PATIENT:\n{LE}')
     
     
     #== == Esta função remove permanentemente o paciente da lista de aguardo da Sala de Recepção    
     def consultarPaciente(self,cpf:str)->str:
         '''Obtem a informação de um paciente através de seu cpf'''
-        posicao=self.__listaAguardo.busca(cpf)
+        try:
+            cpf= self.__translateCPF(cpf)
+            posicao=self.__listaAguardo.busca(cpf)
+            paciente=self.__listaAguardo.elemento(posicao)
         
-        paciente=self.__listaAguardo.elemento(posicao)
-    
+        except ListException as LE:
+            raise ReceptionException(2,f'SOMETHING DID WRONG WHEN I TRIED TO CATCH A PATIENT:\n{LE}')
         return str(paciente)
     
     #== == Esta função remove permanentemente Todos os pacientes da lista de aguardo da Sala de Recepção
@@ -61,25 +93,21 @@ class SalaRecepcao():
     
     def despacharPaciente(self,cpf:str)->str:
         '''Envia um único paciente da lista de aguardo para o consultório'''
-        
-            #self.__consultorio.inserirPaciente(pacienteDespacho) #seria interessante enviar o objeto diretamente para o consultório ao invés de enviar os atributos.
-            #self.__consultorio.inserirPaciente(pacienteDespacho.cpf,pacienteDespacho.nome, pacienteDespacho.especialidadeDesejada, pacienteDespacho.stringuificarGravidade())
-        
-        pacienteDespacho=self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
+        try:
+            cpf= self.__translateCPF(cpf)
+            pacienteDespacho=self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
+
+        except ListException as LE:
+            raise ReceptionException(2,f'SOMETHING DID WRONG WHEN I TRIED TO CATCH A PATIENT:\n{LE}')
+
         
         nome=pacienteDespacho.nome.split()
         nome='#'.join(nome)
         return f'{pacienteDespacho.cpf}/{nome}/{pacienteDespacho.especialidadeDesejada}/{pacienteDespacho.stringuificarGravidade()}'
-            
-        '''
-        except ClinicException as CE:
-            return f'-ERR: OCURRIED THIS ERROR: {CE}'
-        '''
-    
+
     #== == Esta função envia todos os pacientes da lista de aguardo da Sala de Recepção para o consultório
     def despacharTodosPacientes(self)->str:
         '''Retorna uma lista contendo todos os pacientes da lista de aguardo'''
-
         todosPacienteParaDespachar=[]
         while not(self.__listaAguardo.estaVazia()):
             
@@ -90,14 +118,20 @@ class SalaRecepcao():
             todosPacienteParaDespachar.append(pacienteParaDespachar)
         
         return ' '.join(todosPacienteParaDespachar)
-
     
-    # !! !! !! !! Esses métodos estão dentro da Sala de espera mas não deveriam está aqui.
-    def consultarConsutorio(self):
-        return str(self.__consultorio)
-
-    
+    def __translateCPF(self,cpf:str)->str:
+        '''Este método serve para transforma o CPF contendo sinais e transforma em uma cadeia de números'''
+        
+        if len(cpf)>11: # Se for acima de 11 caractéres, removerá os pontos e hífens. 
+            cpf=cpf.replace('-','')
+            cpf=cpf.replace('.','')
+        elif len(cpf) != 11:
+            raise ReceptionException(3,'WRONG CPF ENTRY')
+        return cpf
+        
 if __name__=='__main__':
+    from EstruturasDeDados.Lista.ListaEncadeada import Lista
+    from Paciente import Paciente
 
     sala1=SalaRecepcao()
     sala1.ListarPaciente("34823019705","Joaseiro da Costa","Pediatria","L2")
@@ -114,19 +148,7 @@ if __name__=='__main__':
     
     print(sala1)
     input()
-    '''   
-    sala1.removerPaciente('56567424223')
-    print(sala1)
-    input('removido o paciente 56567424223....')
-    
-    sala1.despacharPaciente('12321313356')
-    print(sala1)
-    input('despachado o paciente 12321313356....')
 
-    sala1.removerTodosPacientes()
-    print(sala1)
-    input('removido todos pacientes....')
-    '''
     print(sala1.despacharPaciente('12321313356'))
     print(sala1.despacharTodosPacientes())
     print(sala1)

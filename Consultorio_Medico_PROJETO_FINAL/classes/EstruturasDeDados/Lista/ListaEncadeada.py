@@ -1,5 +1,5 @@
 #== == == == lista Exception
-class ListaException(Exception):
+class ListException(Exception):
     def __init__(self, msg):
         super().__init__(msg)
         #self.__codError=codeError:int
@@ -23,6 +23,12 @@ class NodeLeader:
 class Lista:
     def __init__(self):
         self.__NodeLeader=NodeLeader()
+
+    def __str__(self)->str:
+        s=f'{ "+++" * 30 }\nQuantidade: {self.__NodeLeader.quantyNodes}\n'
+        for i in range(self.__NodeLeader.quantyNodes): #não queria usar uma repetição, mas fiquei com preguiça :(
+            s+= f'{i+1}|{self.elemento(i+1)}\n{ "===" * 30 }\n'
+        return s
     
     @property
     def NodeLeader(self):
@@ -46,7 +52,7 @@ class Lista:
             return self.__elemento(posicao,self.__NodeLeader.start)
 
         except AssertionError as AE:
-            #raise ListaException(AE)
+            raise ListException(AE)
             pass
     
     def __elemento(self, posicao:int, Node:Node) -> any:
@@ -58,19 +64,19 @@ class Lista:
     def busca(self, key:any)->int: #== ==  Ele busca a partir de uma chave
         ''' 
         return
-            -1: Sem incidências da chaves
+            raise LISTEXCEPTION: Sem incidências da chaves
             n>0: posição da chave
         '''
         #== == O método só não funciona quando a lista estiver vazia
         if self.__NodeLeader.quantyNodes==0: # caso não haja elementos na lista, retorna um 
-            raise  ListaException('EMPTY LIST')
+            raise  ListException('EMPTY LIST')
         return self.__busca(key,self.__NodeLeader.start) #Chama a função recursiva
                               
         
     def __busca(self, key:any, Node:Node)->int:
         NodePosition=1
         if Node==None: # Chegou ao final a lista e não achou o Nó
-           raise ListaException('KEY NOT FOUND')
+           raise ListException('KEY NOT FOUND')
         
         elif key == Node.key: # Vê se o nó da vez possui a chave  
             return 1 # Ele achou!
@@ -94,7 +100,7 @@ class Lista:
                 posicao <= self.__NodeLeader.quantyNodes + 1
                 
             if(self.autenticarChave(key)):
-                raise ListaException('THE KEY IS IN USE')
+                raise ListException('THE KEY IS IN USE')
                 
             newNode=Node(key,conteudo)
             
@@ -119,9 +125,9 @@ class Lista:
             self.__NodeLeader.quantyNodes+=1
 
         except AssertionError:
-            raise ListaException('INVALID POSITION')
+            raise ListException('INVALID POSITION')
         except Exception as E:
-            raise ListaException(E)
+            raise ListException(E)
     
     def __inserir(self, Node:Node, posicao:int, newNode:Node):
 
@@ -156,7 +162,7 @@ class Lista:
             return NodeRemotion.carga #== == Retorna o nó que foi removido
     
         except AssertionError as AE:
-            raise ListaException(AE)
+            raise ListException(AE)
 
     def __remover(self,position:int,Node:Node)->Node:
     
@@ -173,7 +179,8 @@ class Lista:
         return self.__remover(position-1, Node.prox)
 
     #== == remover a lista até ela possuir Zero Nós.
-    def esvazia(self):
+    def esvazia(self)->list[any]:
+        '''Remove todos os nós da lista e retorna um array contendo todos os objetos'''
         ArrayNodes=list() #cria um Array vazio
         self.__esvazia(ArrayNodes) # retorna o resultado  da função recurssiva
         return ArrayNodes
@@ -187,16 +194,13 @@ class Lista:
         
         return self.__esvazia(array) # a função se 'chamará' de novo passando o array para adicionar o próximo 'primeiro' nó, caso haja
     
-    def __str__(self)->str:
-        s=f'Quantidade:{self.__NodeLeader.quantyNodes}\n'
-        for i in range(self.__NodeLeader.quantyNodes): #não queria usar uma repetição, mas fiquei com preguiça :(
-            s+= f'{i+1}|{self.elemento(i+1)}\n{ "===" * 30 }\n'
-        return s
-    
     def autenticarChave(self,key)->bool: #Este método percorerá toda a lista a fim de conferir se já existe a chave
+        '''
+        Verifica se a chave existe na lista; caso ele receba um ListException, é por que ela não existe.
+        '''
         try:
             if self.busca(key):
                 return True
-        except ListaException:
+        except ListException:
             return False
     
