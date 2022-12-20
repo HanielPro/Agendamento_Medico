@@ -1,10 +1,8 @@
 import random
 import time
-#from Consultorio import Consultorio
-#from Especialidade import Especialidade
+
 from threading import Thread
-from Paciente import Paciente
-#from Consultorio import Consultorio
+from classes.Paciente import Paciente
 
 class MedicException(Exception):
     def __init__(self,code,msg) -> None:
@@ -20,7 +18,7 @@ class Medico:
         self.__especialidade=especialidade
         self.__consultorio=consultorio
         self.__ConsultasIntervalo=random.randint(15,30)
-        self.consultar=Thread(target=self.BuscarPaciente)
+        self.consultar=Thread(name= self.__nome, target=self.BuscarPaciente)
         self.consultar.start()
 
     @property
@@ -53,7 +51,6 @@ class Medico:
         except AssertionError:
             raise MedicException(1,'INVALID ENTERED TIME')
 
-    
     #== == == -- Metodos do Médico
     
     def BuscarPaciente(self): #== == == O médico ficará esperando receber um paciente

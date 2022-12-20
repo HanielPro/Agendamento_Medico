@@ -13,21 +13,23 @@ class ServerException(Exception):
         super().__init__(f'Server Exception {code}: \n', msg)
         
 #== == == == Métodos
-def ExecMessage(msg:str): 
+def ExecMessage(msg:str,cliente:str): 
     '''
     Ele receberá a mensagem do cliente e execultará  o método transcrito nela. 
     '''
-    
+    global serverConection
     try:
         msg=msg.upper()
+        msgTrunc=msg.split()
         method=MethodsServerDict[msgTrunc[0]]
         
-        msgTrunc=msg.split()
+        print(method)
         
         if method==1:
             
             if len(msgTrunc)==1 or len(msgTrunc)==2:
-                return inform('CLINIC')
+                serverConection.sendto(inform('CLINIC',cliente).encode(),cliente )
+                return inform('CLINIC',cliente)
                     
             elif len(msgTrunc)==3:
                 if msgTrunc[1]=='SPECIALITY':
@@ -56,7 +58,7 @@ def ExecMessage(msg:str):
     except KeyError as KE:
         raise ServerException(0,'METHOD NOT FOUND')
     
-def inform(type:str,key:str=None):
+def inform(type:str,cliente:str,key:str=None,):
     '''O MÉTODO RETORNA AS INFORMAÇÕES DEPENDENDO DA EXIGÊNCIA DO USUÁRIO
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [METHOD] ?[WHOM] ?[KEY]
@@ -141,9 +143,24 @@ MethodsServerDict={
 
 #== == == Objetos
 consultorio= Consultorio() # objeto do consultório
+consultorio.inserirEspecilidade('Clinica Geral')
+consultorio.inserirEspecilidade('Pediatria')
+consultorio.inserirEspecilidade('Oftalmologia')
+consultorio.inserirEspecilidade('Psiquiatria')
+consultorio.inserirEspecilidade('Cirurgia Geral')
+consultorio.inserirEspecilidade('Otorrinolaringologia')
+consultorio.inserirEspecilidade('Endocrinologia')
+
+consultorio.inserirMedico("Francis Bacon","Pediatria")
+consultorio.inserirMedico("Alfandegario Nobrega","Psiquiatria")
+consultorio.inserirMedico("Antony Nunes","Pediatria")
+consultorio.inserirMedico("Luiz Chaves","Pediatria")
+consultorio.inserirMedico("Jair Messias Bolsonaro","Psiquiatria")
+consultorio.inserirMedico("Luís Inácio Lula","Endocrinologia")
+consultorio.inserirMedico("Gustavo Wagner","Otorrinolaringologia")
 
 #== == == Socket Parte
-HOST = socket.gethostbyname() #o Host gerado automaticamente
+HOST = 'localhost' #o Host gerado automaticamente
 PORT = 5000 #A porta que será usada
 serverConection = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # O socket está sendo criado
 serverConection.bind((HOST, PORT)) #Ele está ouvindo no HOST e PORT pré-definidos
@@ -156,5 +173,5 @@ while True:
     print ('Message from:', cliente)
     print('he sayed: ', msg)
     print('=='*30)
-    serverConection.close()
-    ExecMessage(msg)#envia para o método que irá tratar a mensagem enviada pelo cliente
+    print(ExecMessage(msg,cliente))#envia para o método que irá tratar a mensagem enviada pelo cliente
+serverConection.close()

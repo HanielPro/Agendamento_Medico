@@ -1,8 +1,8 @@
-from EstruturasDeDados.Lista.ListaEncadeada import *
-from EstruturasDeDados.Arvore.ArvoreBusca import *
-from Medico import Medico
-from Paciente import Paciente
-from Especialidade import Especialidade
+from classes.EstruturasDeDados.Lista.ListaEncadeada import *
+from classes.EstruturasDeDados.Arvore.ArvoreBusca import *
+from classes.Medico import Medico
+from classes.Paciente import Paciente
+from classes.Especialidade import Especialidade
 import random
 from threading import Semaphore
 from unicodedata import normalize #!! !! !! !! Precisa importar a biblioteca unide code:  $pip install unidecode
