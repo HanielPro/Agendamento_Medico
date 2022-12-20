@@ -54,7 +54,7 @@ arv.InserirNode(21,'pecados')
 arv.InserirNode(12,'virá e')
 arv.InserirNode(18,'você')
 #arv.emordem()
-
+print(arv)
 print('==========================')
 print('nó removido',arv.removerNo(20))
 print(arv)

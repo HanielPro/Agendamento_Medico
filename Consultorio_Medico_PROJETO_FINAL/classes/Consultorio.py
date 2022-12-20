@@ -1,8 +1,8 @@
 from classes.EstruturasDeDados.Lista.ListaEncadeada import Lista,ListException
 from classes.EstruturasDeDados.Arvore.ArvoreBusca import ArvoreBusca, SearchArborException
-from Agendamento_Medico.Consultorio_Medico_PROJETO_FINAL.classes.Medico import Medico
+from classes.Medico import Medico
 from classes.Paciente import Paciente
-from Agendamento_Medico.Consultorio_Medico_PROJETO_FINAL.classes.Especialidade import Especialidade
+from classes.Especialidade import Especialidade
 import random
 from threading import Semaphore
 from unicodedata import normalize #!! !! !! !! Precisa importar a biblioteca unide code:  $pip install unidecode
@@ -133,7 +133,7 @@ class Consultorio:
     def removerPaciente(self,key:any)->Paciente:
         '''Não funciona se o paciente estiver sendo atendido.'''
         try:
-            self.mutexPaciente()
+            self.mutexPaciente.acquire()
             pacienteRemover=self.__Pacientes.removerNo(key) # Remove o paciente do consultório e faz a coleta do objeto             
             especialidadePaciente=self.captarEspecialidade(pacienteRemover.especialidadeDesejada)#em seguida, obtem qual a especialidade ele está inserido.
             especialidadePaciente.RemoverPaciente(key) #Por fim, remove ele da fila de espera
