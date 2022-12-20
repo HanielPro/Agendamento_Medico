@@ -98,7 +98,7 @@ def ReceptionPage(choice):
 
 def PrincipalPage()->bool:
     '''Aqui onde ocorre as primeiras ecolhas do usuário.'''
-    global cursor,dest,conect
+    global cursor
     
     while True:
         choice=input(cursor)
@@ -125,7 +125,8 @@ def PrincipalPage()->bool:
         elif choice=='2':#======Terminal entre consultorio e recepção
             clearConsole()
             ConsultoryBash()
-            input()
+            choice=''
+            clearConsole()
 
         elif choice=='3':#=======Manual
             choice=''
@@ -138,7 +139,7 @@ def PrincipalPage()->bool:
             MostrarDicionario(ConsultoryManuDict,ConsultoryManuKeys)
             input(cursor)
             clearConsole()
-             
+                
         else:
             clearConsole()
             raise TerminalException(0,'What did you say?! ')
@@ -171,9 +172,8 @@ def ConsultoryBash():
         
         try:
             comand=str.upper(input(cursor))
-            print(comand)
             comand=comand.split()
-            print(comand)
+            
             if comand[0]=='QUIT':
                 '''Example> QUIT'''
                 return
@@ -191,27 +191,28 @@ def ConsultoryBash():
                 '''
                 print(inform(comand))
 
-            elif comand[0]=='DISPATCH':
+            elif comand[0]=='DISPACTH':
                 '''Example> DISPATCH [YYY.YYY.YYY-XX]'''
                 patientCPF= comand[1]#o segundo método deve ser um CPF válido
                 patient=ReceptionRoom.despacharPaciente(patientCPF)
-                comand[1]=patient
-                print(comand)
                 print(patient)# aqui. deve-se enviar o paciente para o consultório
-                ServerConection(' '.join(comand))
-
             
             elif comand[0]=='DISPATCHALL':
                 '''Example> DISPATCHALL'''
                 patients=ReceptionRoom.despacharPaciente(patientCPF)
                 print(patients)# aqui. deve-se enviar todos os pacientes para o consultório
+            else:
+                raise TerminalException(1, f"SORRY, I DON'T RECOGNIZE THIS: {comand}" )
+
         
         except ReceptionException as RE:
             print(RE)
+
         except KeyboardInterrupt:
             break
-        except IndexError:
-            raise TerminalException(1, f"SORRY, I DON'T RECOGNIZE THIS: {comand}")
+
+        except TerminalException as TE:
+             print(TE)
 #== == == ==Variáveis
 #== == Dicionarío com as escolhas
 ConsultoryManuDict={
@@ -265,21 +266,14 @@ ReceptionRoom.ListarPaciente("123.243.133-56","Paula Equinó","Pediatria","L1")
 
 #== == == SOCKET
 HOST = 'localhost'
-PORT = 5000
+PORT = 5001
 conect = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-dest = (HOST, PORT)
+
 #== == == Varíavel qualquer
 separador='=='*30
 separador1='=-'*15
 separador2='-='*15
 cursor='\ntype =>  '
-
-def ServerConection(msg):
-    global dest, conect
-    msg=f'{msg}'
-    conect.sendto(msg.encode(),dest )
-    msg= conect.recvfrom(1024)
-    print(f'{msg}')
 
 flag=True
 while flag:
@@ -290,7 +284,7 @@ while flag:
         MostrarDicionario(PrincipalDict,PrincipalDictKeys)
         
         flag=PrincipalPage()
-
+        
         #-- -- -- Reception Page option
                     
     except TerminalException as ME:

@@ -6,13 +6,12 @@ PORT = 5000
 
 conect = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 dest = (HOST, PORT)
-
+id=input('id deste cliente')
 while True:
     time.sleep(1)
-    msg=input('')
-    msg=f'{msg}'
+    msg=str(random.randint(1,99))
+    print('gerei ',msg)
+    msg=f'{msg}|{id}'
     conect.sendto(msg.encode(),dest )
-    msg= conect.recvfrom(1024)
-    print(f'{msg}')
     time.sleep(1)
 

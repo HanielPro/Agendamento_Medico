@@ -1,14 +1,13 @@
-from classes.EstruturasDeDados.Lista.ListaEncadeada import *
-from classes.EstruturasDeDados.Arvore.ArvoreBusca import *
-from classes.Medico import Medico
+from classes.EstruturasDeDados.Lista.ListaEncadeada import Lista,ListException
+from classes.EstruturasDeDados.Arvore.ArvoreBusca import ArvoreBusca, SearchArborException
+from Agendamento_Medico.Consultorio_Medico_PROJETO_FINAL.classes.Medico import Medico
 from classes.Paciente import Paciente
-from classes.Especialidade import Especialidade
+from Agendamento_Medico.Consultorio_Medico_PROJETO_FINAL.classes.Especialidade import Especialidade
 import random
 from threading import Semaphore
 from unicodedata import normalize #!! !! !! !! Precisa importar a biblioteca unide code:  $pip install unidecode
 
 
-#from EstruturasDeDados.Arvore.ArvoreBusca import *
 
 class ClinicException(Exception):
     
@@ -184,7 +183,6 @@ class Consultorio:
         tamanhoId=10
         idGerado=''
         finalValor=2
-        #nomeSemAcento=nome
         nomeSemAcento = normalize('NFD',nome)
         nomeSemAcento = nomeSemAcento.encode('ascii','ignore')
         nomeSemAcento = nomeSemAcento.decode('utf-8')
@@ -203,12 +201,7 @@ class Consultorio:
         
         return idGerado        
             
-    '''
-    #METODOS DE TESTES
-    def findthesmaller(self):
-        self.__Medicos.smaller()
-        return ''  
-    '''
+
 consultorio1=Consultorio()
 consultorio1.inserirEspecilidade('Clinica Geral')
 consultorio1.inserirEspecilidade('Pediatria')
