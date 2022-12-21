@@ -183,13 +183,13 @@ class Lista:
         return self.__remover(position-1, Node.prox)
 
     #== == remover a lista até ela possuir Zero Nós.
-    def esvazia(self)->list[any]:
+    def esvazia(self):
         '''Remove todos os nós da lista e retorna um array contendo todos os objetos'''
         ArrayNodes=list() #cria um Array vazio
         self.__esvazia(ArrayNodes) # retorna o resultado  da função recurssiva
         return ArrayNodes
          
-    def __esvazia(self,array:list)->list[Node]:
+    def __esvazia(self,array:list):
         
         if self.__NodeLeader.quantyNodes==0: # caso não haja mais nós para ser excluídos ou a Lista já está vazia
             return array #retorna o array contendo todos.

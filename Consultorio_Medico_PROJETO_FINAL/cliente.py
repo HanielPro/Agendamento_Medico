@@ -2,7 +2,7 @@ from classes.SalaRecepcao import SalaRecepcao, ReceptionException
 import socket
 import os 
 
-def MostrarDicionario(dicionario:dict,dictionaryKeys:list[str]):
+def MostrarDicionario(dicionario:dict,dictionaryKeys):
     '''Recebe um dicionário e um array com chaves para poder mostrar na tela as chaves e os seus valores'''
     for i in range(len(dictionaryKeys)):
         print(f'\n[{dictionaryKeys[i]:^10}] => {dicionario.get(dictionaryKeys[i]):^10}')
