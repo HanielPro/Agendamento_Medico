@@ -19,6 +19,7 @@ def ExecMessage(msg:str,cliente:str):
     '''
     global serverConection
     try:
+        response=''
         msg=msg.upper()
         msgTrunc=msg.split()
         method=MethodsServerDict[msgTrunc[0]]
@@ -28,44 +29,51 @@ def ExecMessage(msg:str,cliente:str):
         if method==1:
             
             if len(msgTrunc)==1 or len(msgTrunc)==2:
-                serverConection.sendto(inform('CLINIC',cliente).encode(),cliente )
-                return inform('CLINIC',cliente)
+                response=inform('CLINIC',cliente)
                     
             elif len(msgTrunc)==3:
                 if msgTrunc[1]=='SPECIALITY':
-                    return inform('SPECIALITY',msgTrunc[2])
+                    response=inform('SPECIALITY',msgTrunc[2])
+                    #serverConection.sendto(response.encode(),cliente)
+                    #return response
             
                 elif msgTrunc[1]=='MEDIC':
-                    return inform('MEDIC',msgTrunc[2])
+                    response=inform('MEDIC',msgTrunc[2])
+                    #serverConection.sendto(response.encode(),cliente)
+                    #return response
                 
                 elif msgTrunc[1]=='PATIENT':
-                    return inform('PATIENT',msgTrunc[2])
+                    response=inform('PATIENT',msgTrunc[2])
+                    #serverConection.sendto(response.encode(),cliente)
+                    #return response
       
             else:
                 raise ServerException(1,'DID YOU KNOW HOW WRITE THE COMAND?')
         
         elif method==2:
             patient=msgTrunc[1].split('/')
-            return dispatch(patient)
+            response= dispatch(patient)
         
         elif method==3:
-            patients=msgTrunc[1].split('/')
-            return dispatchAll(patients)    
+            patients=msgTrunc[1:]
+            response=dispatchAll(patients)    
         
-        elif method==4:
-            return removePatient(msgTrunc[1])    
+        elif method==4:#remover paciente
+            response= removePatient(msgTrunc[1]) 
+        
+        serverConection.sendto(response.encode(),cliente)
+        return response
         
     except KeyError as KE:
         raise ServerException(0,'METHOD NOT FOUND')
     
-def inform(type:str,cliente:str,key:str=None,):
+def inform(type:str,key:str=None):
     '''O MÉTODO RETORNA AS INFORMAÇÕES DEPENDENDO DA EXIGÊNCIA DO USUÁRIO
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [METHOD] ?[WHOM] ?[KEY]
     '''
     try:
         if type=='CLINIC':
-            
             return str(consultorio)
         
         elif key==None:
@@ -81,19 +89,20 @@ def inform(type:str,cliente:str,key:str=None,):
             return str(consultorio.ConsultarPaciente(key))
 
     except ClinicException as CE:
-        raise ServerException(2,'The clinic sayed: ',CE)
+        raise ServerException(2,f'The clinic sayed: \n {CE}' )
 
-def dispatch(patient:list[str]):
+def dispatch(patient:list[str])->str:
     '''O MÉTODO INSERE UM PACIENTE NO CONSULTORIO 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [DISPATCH] [CPF/NOME COMPLETO/ESPECIALIDADE/GRAVIDADE]
     '''
     try:
-        nome=patient[0].split('#')
+        nome=patient[1].split('#')
         nome=' '.join(nome)
         
-        consultorio.inserirPaciente(nome,patient[1],patient[2],patient[3])
-    
+        return consultorio.inserirPaciente(patient[0],nome,patient[2],patient[3])
+        
+        
     except ClinicException as CE:
         raise ServerException(2,'The clinic sayed: ',CE)
         
@@ -107,11 +116,13 @@ def dispatchAll(pacientes:list[list[str]]):
         for i in range(len(pacientes)):
             
             patient= pacientes[i]
-            nome=patient[0].split('#')
+            patient= patient.split('/')
+            nome=patient[1].split('#')
             nome=' '.join(nome)
             
-            consultorio.inserirPaciente(nome,patient[1],patient[2],patient[3])
-            
+            consultorio.inserirPaciente(patient[0],nome,patient[2],patient[3])
+        return '+Ok, all dispatched!'
+        
     except ClinicException as CE:
         raise ServerException(2,'The clinic sayed: ',CE)
     
@@ -121,9 +132,8 @@ def removePatient(cpf):
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [REMOVE] [CPF]
     ''' 
-    
     try:
-        consultorio.removerPaciente(cpf)
+        return consultorio.removerPaciente(cpf)
     
     except ClinicException as CE:
         raise ServerException(2,'The clinic sayed: ',CE)
@@ -168,11 +178,19 @@ serverConection.bind((HOST, PORT)) #Ele está ouvindo no HOST e PORT pré-defini
 
 
 while True:
-    msg, cliente = serverConection.recvfrom(1024)
+    msg, cliente = serverConection.recvfrom(8092)
     msg=msg.decode()
     print('=='*30)
     print ('Message from:', cliente)
     print('he sayed: ', msg)
     print('=='*30)
-    print(ExecMessage(msg,cliente))#envia para o método que irá tratar a mensagem enviada pelo cliente
+    try:
+        print(ExecMessage(msg,cliente))#envia para o método que irá tratar a mensagem enviada pelo cliente
+
+    except ServerException as SE:
+        serverConection.sendto( str(SE).encode(), cliente)
+        
+    except Exception as E:
+        serverConection.sendto( f'this error ocurried: \n{E} '.encode(), cliente)
+        
 serverConection.close()

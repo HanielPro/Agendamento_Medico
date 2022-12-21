@@ -14,6 +14,15 @@ def clearConsole():
         command = 'cls'
     os.system(command)
 
+def translateCPF(cpf:str)->str:
+    '''Este método serve para transforma o CPF contendo sinais e transforma em uma cadeia de números'''
+        
+    if len(cpf)>11: # Se for acima de 11 caractéres, removerá os pontos e hífens. 
+        cpf=cpf.replace('-','')
+        cpf=cpf.replace('.','')
+    elif len(cpf) != 11:
+        raise TerminalException(3,'WRONG CPF ENTRY')
+    return cpf
 
 #== ==Referente a execução das escolhas do usuário
 
@@ -143,46 +152,24 @@ def PrincipalPage()->bool:
             clearConsole()
             raise TerminalException(0,'What did you say?! ')
 
-def inform(comand):
-    '''Método relacionado para obtenção de informações do consultório'''
-    try:
-        
-        if len(comand)==1 or (len(comand)==2 and comand[1]=='CLINIC'):
-            return comand #AQUI É PARA ENVIAR UMA MENSAGEM AO CONSULTÓRIO PEDINDO QUE INFORME A SITUAÇÃO DA CLÍNICA
-        
-        parameters=comand[1:]
-        
-        if parameters[0]=='PATIENT':
-            cpf=parameters[1]
-            return cpf #AQUI É PARA ENVIAR UMA MENSAGEM AO CONSULTÓRIO PEDINDO QUE INFORME A SITUAÇÃO DE UM PACIENTE    
-        elif parameters[0]=='MEDIC':
-            enrollment=parameters[1]
-            return enrollment  #AQUI É PARA ENVIAR UMA MENSAGEM AO CONSULTÓRIO PEDINDO QUE INFORME A SITUAÇÃO DE UM MÉDICO
-        elif parameters[0]=='SPECIALITY':
-            nomeclature=parameters[1]
-            return nomeclature  #AQUI É PARA ENVIAR UMA MENSAGEM AO CONSULTÓRIO PEDINDO QUE INFORME A SITUAÇÃO DE UMA ESPECIALIDADE
-                 
-    except IndexError as IE:
-        raise TerminalException(1, f"SORRY, I DON'T RECOGNIZE THIS: {comand}" )
-    
 def ConsultoryBash():
-    cursor='$=> '
-    while True:
-        
+    cursor='\n$=> '
+    while True:    
         try:
             comand=str.upper(input(cursor))
-            print(comand)
             comand=comand.split()
-            print(comand)
-            print(comand[0])
+            
             if comand[0]=='QUIT':
                 '''Example> QUIT'''
                 return
             
             elif comand[0]=='HOWISME':
                 '''Example> WHOISME'''
-                print('ola')
                 print(ReceptionRoom)
+            
+            elif comand[0]=='MANU':
+                '''Example> MANU'''
+                MostrarDicionario(ConsultoryManuDict,ConsultoryManuKeys)
             
             elif comand[0]=='INFORM':
                 '''Example> 
@@ -205,19 +192,24 @@ def ConsultoryBash():
             
             elif comand[0]=='DISPATCHALL':
                 '''Example> DISPATCHALL'''
-                patients=ReceptionRoom.despacharPaciente(patientCPF)
-                print(patients)# aqui. deve-se enviar todos os pacientes para o consultório
+                patients=ReceptionRoom.despacharTodosPacientes()
+                comand.append(patients)
+                print(comand)
+                ServerConection(' '.join(comand))# aqui. deve-se enviar todos os pacientes para o consultório
         
         except ReceptionException as RE:
             print(RE)
         except KeyboardInterrupt:
+            clearConsole()
             break
         except IndexError:
             raise TerminalException(1, f"SORRY, I DON'T RECOGNIZE THIS: {comand}")
+
 #== == == ==Variáveis
 #== == Dicionarío com as escolhas
 ConsultoryManuDict={
     'HOWISME': '[HOWISME] |USE TO GET THE INFORMATION OF HOW IS THE RECEPTION ROOM|',
+    'MANU': '[MANU] |USE TO GET THE INFORMATION OF THE COMANDS|',
     
     'INFORM':'[INFORM] [[SPECIALITY] [SPECIALITY.NAME]], [[MEDIC] [MEDIC.NAME]], [[PATIENT], [PATIENT.CPF]], DEFAULT=[CLINIC]" |USE TO GET INFORMATION OF THE CONSULTORY|',
     
@@ -280,8 +272,9 @@ def ServerConection(msg):
     global dest, conect
     msg=f'{msg}'
     conect.sendto(msg.encode(),dest )
-    msg= conect.recvfrom(1024)
-    print(f'{msg}')
+    msg= conect.recvfrom(8092)
+    mensagem=f'{msg}'
+    print(mensagem)
 
 flag=True
 while flag:

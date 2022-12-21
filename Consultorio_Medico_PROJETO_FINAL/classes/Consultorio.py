@@ -128,7 +128,7 @@ class Consultorio:
         especialidadeListaEspera.inserirPaciente(cpf,NewPaciente) #Adiciona o paciente na Lista da especialidade que ele deseja
         self.__Pacientes.InserirNode(cpf,NewPaciente)# Por fim, adiciona ele na lista dos pacientes do hospital 
         self.mutexPaciente.release()
-        return '+Ok'
+        return f'+Ok Sucess! {nome}'
     
     def removerPaciente(self,key:any)->Paciente:
         '''Não funciona se o paciente estiver sendo atendido.'''
@@ -138,7 +138,7 @@ class Consultorio:
             especialidadePaciente=self.captarEspecialidade(pacienteRemover.especialidadeDesejada)#em seguida, obtem qual a especialidade ele está inserido.
             especialidadePaciente.RemoverPaciente(key) #Por fim, remove ele da fila de espera
             self.mutexPaciente.release()
-            return '+Ok'
+            return f'+Ok, {key} removed'
 
         except SearchArborException as SAE:
             raise ClinicException(0,SAE)
