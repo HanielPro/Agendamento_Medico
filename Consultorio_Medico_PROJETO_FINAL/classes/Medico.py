@@ -3,6 +3,7 @@ import time
 
 from threading import Thread
 from classes.Paciente import Paciente
+from classes.EstruturasDeDados.Lista.ListaEncadeada import ListException
 
 class MedicException(Exception):
     def __init__(self,code,msg) -> None:
@@ -54,16 +55,22 @@ class Medico:
     #== == == -- Metodos do Médico
     
     def BuscarPaciente(self): #== == == O médico ficará esperando receber um paciente
-        paciente=self.__especialidade.RemoverPrimeiroPaciente()
-        self.AtenderPaciente(paciente)
-        #self.__consultorio.removerPaciente(paciente.cpf)
+        try:
+            paciente=self.__especialidade.RemoverPrimeiroPaciente()
+            time.sleep(2)
+            self.AtenderPaciente(paciente)
+            #self.__consultorio.removerPaciente(paciente.cpf)
+        except ListException as LE:
+            time.sleep(1)
+            print(LE)
         time.sleep(2)
     
     def AtenderPaciente(self,paciente:Paciente): #== == ==O médico deverá atender o paciente que contém a sua especialidade
-        TempoConsulta= random.randint(0,20)
-
-        print( f'O paciente:{paciente.nome}, acabou de entrar no consultório do médico: {self.__nome}, especialidade: {self.__especialidade}, a consulta levará: {TempoConsulta}')
+        TempoConsulta= random.randint(10,20)
+        #print(f"{'==='*30 :^20}")
+        print( f'O paciente:{paciente.nome}, acabou de entrar no consultório do médico: {self.__nome}, especialidade: {self.__especialidade}, a consulta levará: {TempoConsulta} segundos')
         time.sleep(TempoConsulta) # momento do atendimento
+        print(f"{'==='*30 :^20}")
 
         print( f'A consulta do paciente:{paciente.nome}, com o médico: {self.__nome}, especialidade: {self.__especialidade}, acabou!')
         

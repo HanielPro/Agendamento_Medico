@@ -91,7 +91,7 @@ def inform(type:str,key:str=None):
     except ClinicException as CE:
         raise ServerException(2,f'The clinic sayed: \n {CE}' )
 
-def dispatch(patient:list[str])->str:
+def dispatch(patient)->str:
     '''O MÉTODO INSERE UM PACIENTE NO CONSULTORIO 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [DISPATCH] [CPF/NOME COMPLETO/ESPECIALIDADE/GRAVIDADE]
@@ -107,7 +107,7 @@ def dispatch(patient:list[str])->str:
         raise ServerException(2,'The clinic sayed: ',CE)
         
 
-def dispatchAll(pacientes:list[list[str]]):
+def dispatchAll(pacientes):
     '''O MÉTODO INSERE VÁRIOS PACIENTES NO CONSULTORIO 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [DISPATCHALL] [LISTA[CPF/NOME COMPLETO/ESPECIALIDADE/GRAVIDADE]]

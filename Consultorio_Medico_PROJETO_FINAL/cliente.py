@@ -274,7 +274,10 @@ def ServerConection(msg):
     conect.sendto(msg.encode(),dest )
     msg= conect.recvfrom(8092)
     mensagem=f'{msg}'
+    
+    print(f"{'==='*30 :^20}")
     print(mensagem)
+    print(f"{'==='*30 :^20}")
 
 flag=True
 while flag:
