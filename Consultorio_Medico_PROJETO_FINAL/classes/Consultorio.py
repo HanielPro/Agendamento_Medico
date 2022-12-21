@@ -146,9 +146,9 @@ class Consultorio:
 
     def exibirPacientes(self)->str: #Método que mostra todos os pacientes no consultório
         '''Retorna uma string contendo a informação de todos os paciente'''
-        self.mutexPaciente.acquire()
+        #self.mutexPaciente.acquire()
         pacientes=str(self.__Pacientes)
-        self.mutexPaciente.release()
+        #self.mutexPaciente.release()
         return pacientes
     
     def ConsultarPaciente(self,key) ->Paciente: #Método que mostra todos os Médicos no consultório

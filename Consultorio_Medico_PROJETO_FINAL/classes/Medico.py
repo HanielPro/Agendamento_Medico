@@ -56,7 +56,7 @@ class Medico:
     def BuscarPaciente(self): #== == == O médico ficará esperando receber um paciente
         paciente=self.__especialidade.RemoverPrimeiroPaciente()
         self.AtenderPaciente(paciente)
-        self.__consultorio.removerPaciente(paciente.cpf)
+        #self.__consultorio.removerPaciente(paciente.cpf)
         time.sleep(2)
     
     def AtenderPaciente(self,paciente:Paciente): #== == ==O médico deverá atender o paciente que contém a sua especialidade

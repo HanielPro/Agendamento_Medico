@@ -63,13 +63,13 @@ class Especialidade:
         if len(self.__listaEspera)==0:
             return '-ERR The list is empty'
         try:
-            self.__patientMutex.acquire()
+            #self.__patientMutex.acquire()
             
             posicao=self.__listaEspera.busca(key)
             paciente=self.__listaEspera.remover(posicao)
 
             self.__quantyPacientes.acquire()
-            self.__patientMutex.release()
+            #self.__patientMutex.release()
 
             return paciente
 
@@ -85,7 +85,7 @@ class Especialidade:
         self.__patientMutex.acquire()
         
         paciente=self.__listaEspera.remover(1)
-    
-        #self.__quantyPacientes.release()
+        self.__patientMutex.release()
+        self.__quantyPacientes.release()
         return paciente
         
