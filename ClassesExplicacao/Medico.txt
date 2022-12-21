@@ -1,0 +1,20 @@
+classe Paciente:
+
+#== == == == Atributos:
+
+#Nome= String sem restrição {O nome do médico em questão}
+
+#Especialidade= String, só pode ser uma especialidade cadastrada anteriormente na classe Hospital {
+    Ela é responsável por ditar com qual Paciente o médico deverá interagir{
+        EX: Paciente que busca um Oftamologísta, deve ser atendido por um médico com especialidade em Oftalmologia             
+    }
+    Não Deverá ser permitido um médico com uma especialidade que não esteja cadastra no hospital.  
+    O médico só poderá conte uma única especialidade
+}
+
+#== == == == Métodos:
+#Ele Pode alterar seus atributos quando quiser desde que as modificações estejam de acordo com as restrições dos atributos.
+
+#Caso não tenha nenhum paciente para ser atendido, na sua fila de espera, o médico deverá ficar esperando a chegada de um paciente
+
+#Caso haja um paciente, o médico deverá atendê-lo, seguindo o tempo de consulta do paciente (divida o tempo de consulta do paciente por 10, para mais rapidez na aplicação)   

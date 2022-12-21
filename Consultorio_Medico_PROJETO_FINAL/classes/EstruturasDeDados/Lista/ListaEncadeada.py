@@ -24,6 +24,10 @@ class Lista:
     def __init__(self):
         self.__NodeLeader=NodeLeader()
 
+    def __len__(self):
+        return self.__NodeLeader.quantyNodes
+
+    
     def __str__(self)->str:
         s=f'{ "+++" * 30 }\nQuantidade: {self.__NodeLeader.quantyNodes}\n'
         for i in range(self.__NodeLeader.quantyNodes): #não queria usar uma repetição, mas fiquei com preguiça :(

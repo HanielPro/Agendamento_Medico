@@ -251,7 +251,7 @@ class ArvoreBusca:
 
             else:    
                 nodeRemoved= self.__removerNo(key,self.__raiz)
-            return nodeRemoved
+            return nodeRemoved.carga
    
         except AssertionError:
             raise SearchArborException(1,'NO ROOT!')

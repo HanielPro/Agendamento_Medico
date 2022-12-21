@@ -1,0 +1,24 @@
+classe Paciente:
+#== == == == Atributos:
+#CPF= STRING, terá que ser de tamanho 11 (excluindo os '.' e o '-') ou tamanho 14 (incluindo os '.' e '-') {Será a responsável por identificar os pacientes.
+    # Não poderá existir pacientes com o mesmo CPF.
+    # Deverá ser uma propriedade inalterável. 
+}
+#Nome= String sem restrição {O nome do Paciente em questão}
+
+#especialidadeDesejadaDesejado= String, sem restrição{
+    Ela é responsável por ditar para qual fila de espera o Paciente deverá interagir{
+        EX: Paciente que busca por um Oftamologísta, deverá ser inserido na fila de Oftalmologia             
+    }
+    O paciente pode desejar qualquer tipo de especialidade, mas o consultório só poderá admitir a consulta com um Médico caso haja um médico com a tal especialidade.  
+    O Paciente só poderá desejar a consulta com um único especialidadeDesejada.
+}
+
+#Gradivade= String, deverá ser uma string condizente com a seguinte lista: ['L1','L2','M1','M2','G'].{
+    #As letras dentro da lista são respectivamente: Leve, Moderado e Gravíssimo, enquanto os números como os graus.
+    # A gravidade, pode ser considerado como a prioridade do paciente, onde o L1 é a mais baixa e G a mais alta.
+    # O paciente com a maior gravidade, deverá ser o mais prioritário na fila de espera das especialidades
+    }
+
+#== == == == Metodos:
+#Ele Poderá alterar seus atributos quando quiser desde que as modificações estejam de acordo com as restrições dos atributos.
