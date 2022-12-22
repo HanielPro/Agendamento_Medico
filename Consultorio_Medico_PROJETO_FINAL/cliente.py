@@ -14,7 +14,6 @@ def clearConsole():
         command = 'cls'
     os.system(command)
 
-
 #== ==Referente a execução das escolhas do usuário
 
 #== Caso o usuário Digite uma escolha indevida
@@ -246,15 +245,15 @@ ReceptionRoom=SalaRecepcao()
 '''
 ReceptionRoom.ListarPaciente("34823019705","Joaseiro da Costa","Pediatria","L2")
 ReceptionRoom.ListarPaciente("56567424223","Pedro Neto SIlveira","Psiquiatria","G")
-ReceptionRoom.ListarPaciente("123.413.133-23","Rogerio SIlveira","Pediatria","M2")
+ReceptionRoom.ListarPaciente("123.413.133-23","Rogerio SIlveira","Oftamologia","M2")
 ReceptionRoom.ListarPaciente("123.413.133-01","Paulo Florinopolis","Pediatria","G")
 ReceptionRoom.ListarPaciente("153.783.108-20","Paulo Cantando","Otorrinolaringologia","G")
 ReceptionRoom.ListarPaciente("123.413.138-34","Paulo lanchando","Otorrinolaringologia","L1")
-ReceptionRoom.ListarPaciente("123.913.188-53","Paulo bebendo","Pediatria","L1")
+ReceptionRoom.ListarPaciente("123.913.188-53","Paulo bebendo","Oftamologia","L1")
 ReceptionRoom.ListarPaciente("123.413.138-72","Paula Sorrino","Pediatria","L1")
 ReceptionRoom.ListarPaciente("123.413.166-51","Paulo Subindo","Psiquiatria","G")
-ReceptionRoom.ListarPaciente("123.415.123-03","Paulo Chorando","Pediatria","G")
-ReceptionRoom.ListarPaciente("123.243.133-56","Paula Equinó","Pediatria","L1")
+ReceptionRoom.ListarPaciente("123.415.123-03","Paulo Chorando","Endocrinologia","G")
+ReceptionRoom.ListarPaciente("123.243.133-56","Paula Equinó","Endocrinologia","L1")
 
 #== == == Varíavel qualquer
 separador='=='*30

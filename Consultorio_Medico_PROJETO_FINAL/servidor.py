@@ -46,10 +46,8 @@ def ExecMessage(msg:str,cliente:str):
             response= dispatch(patient)
         
         elif method==3:
-            patients=msgTrunc[1:]
-            print(patients)  
+            patients=msgTrunc[1:]  
             response=dispatchAll(patients)  
-            print(patients)  
         
         elif method==4:#remover paciente
             response= removePatient(msgTrunc[1]) 
@@ -160,11 +158,11 @@ MethodsServerDict={
 
 #== == == Objetos
 consultorio= Consultorio() # objeto do consultório
-consultorio.inserirEspecilidade('Clinica Geral')
+consultorio.inserirEspecilidade('Geral')
 consultorio.inserirEspecilidade('Pediatria')
-consultorio.inserirEspecilidade('Oftalmologia')
+consultorio.inserirEspecilidade('Oftamologia')
 consultorio.inserirEspecilidade('Psiquiatria')
-consultorio.inserirEspecilidade('Cirurgia Geral')
+consultorio.inserirEspecilidade('Cirurgia')
 consultorio.inserirEspecilidade('Otorrinolaringologia')
 consultorio.inserirEspecilidade('Endocrinologia')
 
@@ -172,6 +170,7 @@ consultorio.inserirMedico("Francis Bacon","Pediatria")
 consultorio.inserirMedico("Alfandegario Nobrega","Psiquiatria")
 consultorio.inserirMedico("Antony Nunes","Pediatria")
 consultorio.inserirMedico("Luiz Chaves","Pediatria")
+consultorio.inserirMedico("JOÃO MACHADO","OFTAMOLOGIA")
 consultorio.inserirMedico("Jair Messias Bolsonaro","Psiquiatria")
 consultorio.inserirMedico("Luís Inácio Lula","Endocrinologia")
 consultorio.inserirMedico("Gustavo Wagner","Otorrinolaringologia")
