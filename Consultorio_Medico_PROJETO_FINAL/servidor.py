@@ -47,7 +47,9 @@ def ExecMessage(msg:str,cliente:str):
         
         elif method==3:
             patients=msgTrunc[1:]
-            response=dispatchAll(patients)    
+            print(patients)  
+            response=dispatchAll(patients)  
+            print(patients)  
         
         elif method==4:#remover paciente
             response= removePatient(msgTrunc[1]) 

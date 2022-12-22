@@ -277,13 +277,15 @@ class ArvoreBusca:
                     return aux
                 #aqui o seu substituto será copiado para o lugar do nó removido
                 aux=self.__the_smaller(node.dir)
-                node=aux
+                
+                node.carga=aux.carga
                 #aqui a versão original será removida
                 node.dir=self.__removerNo(aux.key,node.dir)
+                return node
             return node
-
-        else: raise SearchArborException(2,'KEY NOT FOUND!') #Não há mais caminho para este nó
-   
+        else:
+            return None
+        
     def smaller(self):
         return self.__the_smaller(self.__raiz)
    
