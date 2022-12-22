@@ -117,15 +117,12 @@ class Consultorio:
         
         except SearchArborException as SAE:
             raise ClinicException(0,SAE)
-
     
     #== == == -- Metodos relacionados ao paciente
-    
     def inserirPaciente(self,cpf:str,nome:str,especialidade:str,gravidade:str):
         try:
             if not(self.verificarEspecialidade(especialidade)):#Primeiro, checa se a especialidade  que deseja inserilo existe
                 raise ClinicException(3,'SPECIALITY NOT FOUND')
-        
             #== == -- -- Entra na zona crítica
             self.__mutexClinicaPaciente.acquire()
             especialidadeListaEspera= self.captarEspecialidade(especialidade)# Depois, Busca a especialidade no qual o paciente será inserido
@@ -133,7 +130,6 @@ class Consultorio:
             NewPaciente=Paciente(cpf,nome,especialidade,gravidade) #Adiciona os pacientes na arvóre de pacientes
 
             self.__Pacientes.InserirNode(cpf,NewPaciente)# Por fim, adiciona ele na lista dos pacientes do hospital 
-            
             
             especialidadeListaEspera.inserirPaciente(cpf,NewPaciente) #Adiciona o paciente na Lista da especialidade que ele deseja
             self.__mutexClinicaPaciente.release()
@@ -169,12 +165,15 @@ class Consultorio:
         try:
             #== == -- -- Entra na zona crítica
             self.__mutexClinicaPaciente.acquire()
+        
             self.__Pacientes.removerNo(cpf)
+        
             self.__mutexClinicaPaciente.release()
             #== == -- -- sai da zona crítica
+        
         except SearchArborException as SAE:
             self.__mutexClinicaPaciente.release()# sai da zona crítica rapidamente
-            raise ClinicException(0,SAE)
+            raise ListException(0,SAE)
             
          
 

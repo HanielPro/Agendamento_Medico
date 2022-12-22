@@ -8,7 +8,7 @@ class Especialidade:
         self.__nomeclatura= nomeclatura.upper()
         self.__listaEspera= Lista()
         self.__consultorio=consultorio
-        self.__quantyPacientes=Semaphore(0)#inicia vazia, pois ela serve para indicar a quantidade de pacientes naquela especialidade
+        self.quantyPacientes=Semaphore(0)#inicia vazia, pois ela serve para indicar a quantidade de pacientes naquela especialidade
         self.__patientCriticalMutex=Semaphore(1)
 
     def __str__(self) -> str:
@@ -25,16 +25,17 @@ class Especialidade:
     
     def inserirPaciente(self,key:any,paciente:Paciente): #Método que insere um paciente na lista de espera
         '''Insere um paciente na lista de espera'''
+        
         self.__patientCriticalMutex.acquire()
 
         posicao=self.__checarPosicaoPorGravidade(paciente,1)
         self.__listaEspera.inserir(key,paciente,posicao)
-        
+
         self.__patientCriticalMutex.release()
-        self.__quantyPacientes.release()
+        
+        self.quantyPacientes.release()
 
     
-
     def __checarPosicaoPorGravidade(self,paciente:Paciente,posicaoAtual:int) -> int:
 
         '''
@@ -45,7 +46,6 @@ class Especialidade:
         Pior caso é quando a resposta está no final da lista: O(N)
 
         '''
-
         if self.__listaEspera.tamanho()< posicaoAtual : # Caso a lista esteja vazia, ou caso tenha chegado no final desta.
             return posicaoAtual
 
@@ -64,7 +64,7 @@ class Especialidade:
             return '-ERR The list is empty'
         try:
             
-            #self.__quantyPacientes.acquire()
+            self.quantyPacientes.acquire()
             self.__patientCriticalMutex.acquire()#entra na zona critica
             
             posicao=self.__listaEspera.busca(key)#procura por uma detemrinada chave
@@ -80,27 +80,28 @@ class Especialidade:
             return '-ERR Key not found'
 
     
-    def RemoverPrimeiroPaciente(self)->Paciente:        
+    def RemoverPrimeiroPaciente(self)->Paciente:
         '''Remove o primeiro paciente da lista de espera e também do consultório'''
         try:
             #== == -- --Entrada na zona crítica da especialidade
-            self.__quantyPacientes.acquire()
+            #self.quantyPacientes.acquire()
+                 
             self.__patientCriticalMutex.acquire()#entra na zona critica
         
             paciente=self.__listaEspera.remover(1)
-            #print(paciente)
-            #== == -- --Entrada da zona critica do consultório
+
             self.__patientCriticalMutex.release()
             #== == -- --Saída da zona critica da especialidade
+
+            #== == -- --Entrada da zona critica do consultório
             self.__consultorio.removerPacienteConsultado(paciente.cpf)
-            
-            
             
             #== == -- --Saída da zona critica do consultório
             return paciente
         
-        except ListException:#caso seja retornado um erro
+        except ListException as LE:#caso seja retornado um erro
             self.__patientCriticalMutex.release()#ele rapidamente sai da área crítica
-            self.__quantyPacientes.acquire()#ele retorna a quantidade de paciente para o antigo estado
+            self.quantyPacientes.acquire()#ele retorna a quantidade de paciente para o antigo estado
+            
+            print(LE)
             return '-ERR Key not found'
-        
