@@ -175,7 +175,7 @@ consultorio.inserirMedico("Luís Inácio Lula","Endocrinologia")
 consultorio.inserirMedico("Gustavo Wagner","Otorrinolaringologia")
 
 #== == == Socket Parte
-HOST = 'localhost' #o Host gerado automaticamente
+HOST = '0.0.0.0' #o Host gerado automaticamente
 PORT = 5000 #A porta que será usada
 serverConection = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # O socket está sendo criado
 serverConection.bind((HOST, PORT)) #Ele está ouvindo no HOST e PORT pré-definidos

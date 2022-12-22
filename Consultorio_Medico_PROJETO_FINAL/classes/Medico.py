@@ -69,13 +69,12 @@ class Medico:
         TempoConsulta= random.randint(10,20)
         #print(f"{'==='*30 :^20}")
         
-
+        self.consultar.join()
         print( f'O paciente:{paciente.nome}, acabou de entrar no consultório do médico: {self.__nome}, especialidade: {self.__especialidade.nomeclatura}, a consulta levará: {TempoConsulta} segundos')
         
         time.sleep(TempoConsulta) # momento do atendimento
         
-        time.sleep(1)
-
+        self.consultar.join()
         print(f"{'==='*30 :^20}")
         print( f'A consulta do paciente:{paciente.nome}, com o médico: {self.__nome}, especialidade: {self.__especialidade.nomeclatura}, acabou!')
 
