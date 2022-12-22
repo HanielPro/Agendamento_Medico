@@ -54,16 +54,17 @@ class Medico:
     #== == == -- Metodos do Médico
     
     def BuscarPaciente(self): #== == == O médico ficará esperando receber um paciente
-        try:
-            paciente=self.__especialidade.RemoverPrimeiroPaciente()
-            
+        while True:
+            try:
+                paciente=self.__especialidade.RemoverPrimeiroPaciente()
+                
+                #time.sleep(2)
+                self.AtenderPaciente(paciente) # O médico n precisa saber dos semáforos, ele apenas segue a orientação da especialidade
+                
+            except ListException as LE:
+                time.sleep(1)
+                print(LE)
             #time.sleep(2)
-            self.AtenderPaciente(paciente) # O médico n precisa saber dos semáforos, ele apenas segue a orientação da especialidade
-            
-        except ListException as LE:
-            time.sleep(1)
-            print(LE)
-        #time.sleep(2)
     
     def AtenderPaciente(self,paciente:Paciente): #== == ==O médico deverá atender o paciente que contém a sua especialidade
         TempoConsulta= random.randint(10,20)
