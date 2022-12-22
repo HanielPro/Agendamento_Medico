@@ -265,7 +265,7 @@ cursor='\ntype =>  '
 
 def ServerConection(msg:str):
     #== == == SOCKET
-    HOST = 'localhost'
+    global HOST
     PORT = 5000
     conect = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     dest = (HOST, PORT)
@@ -288,6 +288,7 @@ def ServerConection(msg:str):
         print(f"{'==='*30 :^20}")
 
 flag=True
+HOST=input('Digite o IP: ')
 while flag:
     #-- -- -- ao logar ou sair de um dos menus, o usuário irá para a página Principal
     try:
