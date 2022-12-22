@@ -1,0 +1,96 @@
+Funcionamento Dos Métodos do protocolo criado, Parâmetros , Resposta , Mensagem de erros
+
+// CLIENTE //
+
+
+ // PrincipalDict : Nos dá acesso ao Prompt principal, onde podemos escolher o caminho para qual prompt desejamos // 
+ 
+ '1': 'RECEPTION MENU' : Garante acesso á recepcão 
+ '2':'CONSULTORY BASH' : Nos dá acesso aos comandos do consultório
+ '3':'CONSULTORY BASH MANU' : Retorna quais comandos podemos usar no consultório
+ 
+// ConsultoryManuDict : Comando que dá acesso ao prompt de comando de consultório, permitindo executar os comandos abaixo //
+
+"HOWISME" : O comando vai informar em qual sala de recepçao o cliente está situado, passando (ReceptionRoom) como parâmetro.
+
+
+"MANU" : Retorna o dicionário de comandos de comandos que podem ser ultilizados no bash, Chamando a função: MostrarDicionario()
+Que por sua vez passa (ConsultoryManuDict) e (ConsultoryManuKeys) como parâmetros.
+
+"INFORM" : Após ser chamado, o "INFORM" ultiliza da função "ServerConection()" e ser ultilizado sozinho para ver informações gerais do consultório,
+ou passar parâmetros que fornecem as informações especificas abaixo:
+
+// PARÂMETROS DE INFORM //
+
+"INFORM SPECIALITYS" Retorna as especialidades disponíveis.
+
+"INFORM MEDICS" Informa os medicos disponíveis no momento.
+
+"INFORM PACIENTS" Retorna as informações dos pacientes na lista de espera.
+
+"INFORM CLINIC" Default Para retornar informações gerais.
+
+// PARÂMETROS DE INFORM //
+
+
+"DISPATCH" : Recebe numéro do cpf do paciente como parâmetro, e tem como função remover o paciente da lista de espera, o jogando direto ao consultório.
+
+"DISPATCHALL" : Manda todos os pacientes da lista de espera direto ao consultório.
+
+"DISPATCHALL" : Recebe o número de cpf do paciente como parâmetro , é responsável por remove-lo da clínica.
+
+"QUIT" : Ultilizado para sair do Prompt de Consultório.
+
+PS : Qualquer comando não disponível retornará a mensagem: "SORRY, I DON'T RECOGNIZE THIS" juntamente a mensagem de erro.
+
+// ReceptionDict : Nos dá acesso a recepção, nos permitindo usar números de 1 à 5 como parâmetro para fazer operações.
+ 
+'1': 'SHOW THE AWAITING LIST', (Mostrar Lista de espera)
+'2':'ADD A PATIENT INTO THE AWAITING LIST', (Adcione um paciente a lista de espera)
+'3':'REMOVE A PATIENT OF THE AWAITING LIST', (Remover um paciente da lista de espera)
+'4':'REMOVE ALL PATIENT OF THE AWAITING LIST', (Remover todos os pcientes da lista de espera)
+'5':'SHOW A PATIENT', (Mostrar um unico paciente)
+
+
+// SERVIDOR //  
+
+ 
+// MethodsServerDict : Comando que nos dá acesso ao bash principal retornando os comandos que podem ser ultilizados // 
+
+// ExecMessage é esperados como Parâmetro: code(int) ou msg(str) , irá receber a mensagem do cliente e execultar o método eescrito nela.
+
+ERRO : São esperados como Parâmetro: code(int) ou msg(str)
+0: Método não encontrado.
+1: O cliente escreveu o método certo, mas não inseriu os parametros adequado
+2: Ocorreu algum erro dentro do consultorio
+'''
+
+"INFORM" : Método que retorna as informações dependendo dos parâmentros dados pelo cliente :
+são esperados ['CLINIC','SPECIALITYS','MEDICS','PATIENTS']
+
+"DISPATCH" : Usando de paciente, é Responsável por adcionar um paciente no consultório, são esperados como parâmetro:
+[CPF/NOME COMPLETO/ESPECIALIDADE/GRAVIDADE]
+
+ERRO: Caso ocorrar algum erro a clínica retona a mensagem 'The clinic sayed: CE' nome do problema
+
+"DISPATCHALL" : usando (pacientes) O MÉTODO INSERE VÁRIOS PACIENTES NO CONSULTORIO  QUE SÃO COMO PARAMÊTROS A PASSAR:
+[DISPATCHALL] [LISTA[CPF/NOME COMPLETO/ESPECIALIDADE/GRAVIDADE]]
+
+"REMOVERPATIENT": Usando de (cpf) o método remove um paciente do consultório, são esperados a ser passados :
+[REMOVEPATIENT] [CPF] 
+
+"HIREMEDIC": Adiciona um novo Medico ao consultório
+
+"FIREMEDIC": Remove um Medico do consultório
+    
+"NEWSPECIALITY": Adiciona uma nova Especialidade ao consultório
+
+
+
+
+ 
+ 
+
+
+
+
