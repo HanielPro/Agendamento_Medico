@@ -235,7 +235,7 @@ class ArvoreBusca:
 
                 #caso um dos lado estaja vazio.
                 elif nodeRemoved.esq != None:
-                    NodeChanged=self.__the_bigger(self.raiz.esq)
+                    NodeChanged=self.__the_bigger(self.__raiz.esq)
                     
                     self.__raiz.carga=NodeChanged.carga
                     nodeRemoved.key=NodeChanged.key
@@ -244,7 +244,7 @@ class ArvoreBusca:
                 elif nodeRemoved.dir != None:
                     #nesse caso haverá um tratamento especial, como se trata do nó esquerdo, onde os menores numeros relativos
                     #a raiz ficam armazenados, teriamos que caçar o maior nó desse hemisfério.
-                    NodeChanged=self.__the_smaller(self.raiz.dir)
+                    NodeChanged=self.__the_smaller(self.__raiz.dir)
                     self.__raiz.carga,nodeRemoved.key=NodeChanged.carga,NodeChanged.key
                     self.__raiz.esq=self.__removerNo(NodeChanged.key,self.__raiz.esq)
 
@@ -280,7 +280,6 @@ class ArvoreBusca:
                 node=aux
                 #aqui a versão original será removida
                 node.dir=self.__removerNo(aux.key,node.dir)
-
             return node
 
         else: raise SearchArborException(2,'KEY NOT FOUND!') #Não há mais caminho para este nó
@@ -301,7 +300,7 @@ class ArvoreBusca:
 
     def __the_bigger(self,node:Node)->Node:
         if node is None:
-            return
+            return node
         aux = node
         while aux.dir is not None:#se houver um nó a direita do nó atual, significa que há um nó maior
             aux=aux.dir

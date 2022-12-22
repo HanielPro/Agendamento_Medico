@@ -241,21 +241,3 @@ class Consultorio:
                 idGerado+=str(chr(random.randrange(65, 90)))
         
         return idGerado        
-            
-
-consultorio1=Consultorio()
-consultorio1.inserirEspecilidade('Clinica Geral')
-consultorio1.inserirEspecilidade('Pediatria')
-consultorio1.inserirEspecilidade('Oftalmologia')
-consultorio1.inserirEspecilidade('Psiquiatria')
-consultorio1.inserirEspecilidade('Cirurgia Geral')
-consultorio1.inserirEspecilidade('Otorrinolaringologia')
-consultorio1.inserirEspecilidade('Endocrinologia')
-
-consultorio1.inserirMedico("Francis Bacon","Pediatria")
-consultorio1.inserirMedico("Alfandegario Nobrega","Psiquiatria")
-consultorio1.inserirMedico("Antony Nunes","Pediatria")
-consultorio1.inserirMedico("Luiz Chaves","Pediatria")
-consultorio1.inserirMedico("Jair Messias Bolsonaro","Psiquiatria")
-consultorio1.inserirMedico("Luís Inácio Lula","Endocrinologia")
-consultorio1.inserirMedico("Gustavo Wagner","Otorrinolaringologia")

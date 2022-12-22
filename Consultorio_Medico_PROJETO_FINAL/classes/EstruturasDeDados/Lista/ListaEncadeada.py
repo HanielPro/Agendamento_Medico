@@ -178,7 +178,7 @@ class Lista:
                 self.__NodeLeader.end=Node
                 
             Node.prox=NodeToRemove.prox
-            return NodeToRemove.carga
+            return NodeToRemove
 
         return self.__remover(position-1, Node.prox)
 

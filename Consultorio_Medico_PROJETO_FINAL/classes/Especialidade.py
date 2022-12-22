@@ -25,12 +25,12 @@ class Especialidade:
     
     def inserirPaciente(self,key:any,paciente:Paciente): #Método que insere um paciente na lista de espera
         '''Insere um paciente na lista de espera'''
-        #self.__patientCriticalMutex.acquire()
+        self.__patientCriticalMutex.acquire()
 
         posicao=self.__checarPosicaoPorGravidade(paciente,1)
         self.__listaEspera.inserir(key,paciente,posicao)
         
-        #self.__patientCriticalMutex.release()
+        self.__patientCriticalMutex.release()
         self.__quantyPacientes.release()
 
     
