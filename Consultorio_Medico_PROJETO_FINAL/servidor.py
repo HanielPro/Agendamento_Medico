@@ -1,7 +1,6 @@
 from classes.Consultorio import Consultorio, ClinicException
 import socket
 #import os
-import struct
 #from threading import Thread, Semaphore
 
 class ServerException(Exception):
@@ -15,6 +14,16 @@ class ServerException(Exception):
         super().__init__(f'Server Exception {code}: \n', msg)
         
 #== == == == Métodos
+def translateCPF(cpf:str)->str:
+    '''Este método serve para transforma o CPF contendo sinais e transforma em uma cadeia de números'''
+        
+    if len(cpf)>11: # Se for acima de 11 caractéres, removerá os pontos e hífens. 
+        cpf=cpf.replace('-','')
+        cpf=cpf.replace('.','')
+    elif len(cpf) != 11:
+        raise ServerException(1,'-ERR WRONG CPF ENTRY')
+    return cpf
+
 def ExecMessage(msg:str,cliente:str): 
     '''
     Ele receberá a mensagem do cliente e execultará  o método transcrito nela. 
@@ -26,12 +35,7 @@ def ExecMessage(msg:str,cliente:str):
         msgTrunc=msg.split()
         method=MethodsServerDict[msgTrunc[0]]
         
-        print(method)
-        
-        if method==1:
-            
-            if method==1: #INFORM( CLINIC,PATIENTS, SPECIALITYS, MEDICS.)
-                
+        if method==1:                
                 if len(msgTrunc)==1: #só o método inform
                     response=inform('CLINIC')
                 else:
@@ -49,8 +53,8 @@ def ExecMessage(msg:str,cliente:str):
             response= removePatient(msgTrunc[1]) 
         
         serverConection.sendto(response.encode(),cliente)
-        if method =='INFORM':
-            return 'FILE SENT'
+        if method ==1:
+            response=f'+OK FILE inform{msgTrunc[1]}.txt sent'
         return response
         
     except KeyError as KE:
@@ -61,8 +65,13 @@ def inform(type:str):
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [METHOD] ?[WHOM]
     '''
+    parametersList=['CLINIC','SPECIALITYS','MEDICS','PATIENTS']
     try:
-        arquivo= open(f'inform{type}.txt','w')
+        if type in parametersList:
+            arquivo= open(f'inform{type}.txt','w')
+        else:
+            raise ServerException(2,f'-ERR THIS NOT THE RIGHT COMAND' )
+        
         if type=='CLINIC':
             arquivo.write(str(consultorio))
             
@@ -74,8 +83,7 @@ def inform(type:str):
         
         elif type=='PATIENTS':
             arquivo.write(str(consultorio.exibirPacientes()))
-        else:
-            raise ServerException(2,f'-ERR THIS NOT THE RIGHT COMAND' )
+
         arquivo.close()
         dados_upload = ''
 
@@ -86,7 +94,7 @@ def inform(type:str):
         arquivo.close()
         
         return dados_upload
-
+    
     except ClinicException as CE:
         raise ServerException(2,f'-ERR THE CLINIC SAYED: \n {CE}' )
 
@@ -101,11 +109,9 @@ def dispatch(patient)->str:
         
         return consultorio.inserirPaciente(patient[0],nome,patient[2],patient[3])
         
-        
     except ClinicException as CE:
         raise ServerException(2,'The clinic sayed: ',CE)
         
-
 def dispatchAll(pacientes):
     '''O MÉTODO INSERE VÁRIOS PACIENTES NO CONSULTORIO 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
@@ -124,13 +130,12 @@ def dispatchAll(pacientes):
         
     except ClinicException as CE:
         raise ServerException(2,'The clinic sayed: ',CE)
-    
 
 def removePatient(cpf):
     '''O MÉTODO REMOVE UM PACIENTE DO CONSULTORIO 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
-    [REMOVE] [CPF]
-    ''' 
+    [REMOVEPATIENT] [CPF]
+    '''
     try:
         return consultorio.removerPaciente(cpf)
     
@@ -189,6 +194,9 @@ while True:
     except ServerException as SE:
         serverConection.sendto( str(SE).encode(), cliente)
         
+    except KeyboardInterrupt:
+        break
+     
     except Exception as E:
         serverConection.sendto( f'this error ocurried: \n{E} '.encode(), cliente)
         

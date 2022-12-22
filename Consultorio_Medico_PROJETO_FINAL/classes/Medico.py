@@ -12,12 +12,11 @@ class MedicException(Exception):
 
 class Medico:
     
-    def __init__(self,matricula,nome:str,especialidade, consultorio) -> None:
+    def __init__(self,matricula,nome:str,especialidade) -> None:
         
         self.__matricula=matricula
         self.__nome=nome.upper()
         self.__especialidade=especialidade
-        self.__consultorio=consultorio
         self.__ConsultasIntervalo=random.randint(15,30)
         self.consultar=Thread(name= self.__nome, target=self.BuscarPaciente)
         self.consultar.start()
@@ -34,8 +33,8 @@ class Medico:
     def especialidade(self):
         return self.__especialidade
     
-    @especialidade.setter
     #== == == Só insere se a especialidade estiver na lista de especialidades no consultório
+    @especialidade.setter
     def especialidade(self,especialidade):
         #assert especialidade in Hospital.especialidadesLista, MedicException('SPECIALTY NOT REGISTERED IN HOSPITAL')
         self.__especialidade=especialidade
@@ -57,23 +56,27 @@ class Medico:
     def BuscarPaciente(self): #== == == O médico ficará esperando receber um paciente
         try:
             paciente=self.__especialidade.RemoverPrimeiroPaciente()
-            time.sleep(2)
-            self.AtenderPaciente(paciente)
-            #self.__consultorio.removerPaciente(paciente.cpf)
+            #time.sleep(2)
+            self.AtenderPaciente(paciente) # O médico n precisa saber dos semáforos, ele apenas segue a orientação da especialidade
+            
         except ListException as LE:
             time.sleep(1)
             print(LE)
-        time.sleep(2)
+        #time.sleep(2)
     
     def AtenderPaciente(self,paciente:Paciente): #== == ==O médico deverá atender o paciente que contém a sua especialidade
         TempoConsulta= random.randint(10,20)
         #print(f"{'==='*30 :^20}")
-        print( f'O paciente:{paciente.nome}, acabou de entrar no consultório do médico: {self.__nome}, especialidade: {self.__especialidade}, a consulta levará: {TempoConsulta} segundos')
-        time.sleep(TempoConsulta) # momento do atendimento
-        print(f"{'==='*30 :^20}")
-
-        print( f'A consulta do paciente:{paciente.nome}, com o médico: {self.__nome}, especialidade: {self.__especialidade}, acabou!')
         
+        self.consultar.join()
+        print( f'O paciente:{paciente.nome}, acabou de entrar no consultório do médico: {self.__nome}, especialidade: {self.__especialidade.nomeclatura}, a consulta levará: {TempoConsulta} segundos')
+        
+        time.sleep(TempoConsulta) # momento do atendimento
+        
+        self.consultar.join()
+        print(f"{'==='*30 :^20}")
+        print( f'A consulta do paciente:{paciente.nome}, com o médico: {self.__nome}, especialidade: {self.__especialidade.nomeclatura}, acabou!')
+        time.sleep(1)
 
     def __str__(self) -> str:
-        return f' | matrícula: {self.__matricula}|  nome:{self.__nome}| especialide: {str(self.__especialidade.nomeclatura)}| consultas sequenciais: {self.__ConsultasIntervalo}'
+        return f' | matrícula: {self.__matricula}|  nome:{self.__nome}| especialide: {self.__especialidade.nomeclatura}| consultas sequenciais: {self.__ConsultasIntervalo}'

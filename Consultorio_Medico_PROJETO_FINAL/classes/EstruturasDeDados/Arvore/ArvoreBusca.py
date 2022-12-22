@@ -140,7 +140,6 @@ class ArvoreBusca:
             if Node.dir==None: # Não há sub-árvores a direita do nó
                 Node.dir=newNode
                 return # encerra a recursão
-            
             else: #Caso haja algum(uns) nó(s) a direita, terá a tentativa de inserir o nó lá
                 self.__InserirNode(Node.dir,newNode)
         
@@ -204,10 +203,10 @@ class ArvoreBusca:
             return node.carga 
         
         elif key < node.key:  #testa se a chave está a esquerda do nó
-            return self.__busca(key, node.esq)
+            return self.__elemento(key, node.esq)
         
         elif key < node.key:  #se a chave não está a esquerda, então testa se está a direita
-            return self.__busca(key, node.esq)
+            return self.__elemento(key, node.esq)
         
     #== == == Método para remover Nós em uma árvore de busca
 

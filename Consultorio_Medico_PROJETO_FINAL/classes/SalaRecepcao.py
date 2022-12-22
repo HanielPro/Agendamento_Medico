@@ -22,13 +22,14 @@ class SalaRecepcao():
     
     def __str__(self) -> str:
         return str(self.__listaAguardo)
-    
+   
+ 
     #== == Esta função insere o paciente na lista de aguardo da Sala de Recepção
     def ListarPaciente(self,cpf:str, nome:str, especialidadeDesejada:str, gravidade:str)-> None:
         '''Adiciona um novo paciente a lista de espera'''
         try:
             
-            cpf=self.__translateCPF(cpf)
+            cpf=self.translateCPF(cpf)
             newPaciente=Paciente(cpf,nome,especialidadeDesejada,gravidade)
             posicao=self.__checarPosicaoPorGravidade(newPaciente,1) # a posição é gerada a partir de uma busca na lista pela menor prioridade
             self.__listaAguardo.inserir(cpf,newPaciente,posicao) 
@@ -65,7 +66,7 @@ class SalaRecepcao():
     def removerPaciente(self,cpf:str)->str:
         '''Remove um único paciente da lista de aguardo'''
         try:
-            cpf= self.__translateCPF(cpf)
+            cpf= self.translateCPF(cpf)
             self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
             return '+OK PATIENT REMOVED'
         except ListException as LE:
@@ -76,7 +77,7 @@ class SalaRecepcao():
     def consultarPaciente(self,cpf:str)->str:
         '''Obtem a informação de um paciente através de seu cpf'''
         try:
-            cpf= self.__translateCPF(cpf)
+            cpf= self.translateCPF(cpf)
             posicao=self.__listaAguardo.busca(cpf)
             paciente=self.__listaAguardo.elemento(posicao)
         
@@ -94,7 +95,7 @@ class SalaRecepcao():
     def despacharPaciente(self,cpf:str)->str:
         '''Envia um único paciente da lista de aguardo para o consultório'''
         try:
-            cpf= self.__translateCPF(cpf)
+            cpf= self.translateCPF(cpf)
             pacienteDespacho=self.__listaAguardo.remover(self.__listaAguardo.busca(cpf))
 
         except ListException as LE:
@@ -119,7 +120,7 @@ class SalaRecepcao():
         
         return ' '.join(todosPacienteParaDespachar)
     
-    def __translateCPF(self,cpf:str)->str:
+    def translateCPF(self,cpf:str)->str:
         '''Este método serve para transforma o CPF contendo sinais e transforma em uma cadeia de números'''
         
         if len(cpf)>11: # Se for acima de 11 caractéres, removerá os pontos e hífens. 
@@ -128,7 +129,7 @@ class SalaRecepcao():
         elif len(cpf) != 11:
             raise ReceptionException(3,'WRONG CPF ENTRY')
         return cpf
-        
+'''
 if __name__=='__main__':
     from EstruturasDeDados.Lista.ListaEncadeada import Lista
     from Paciente import Paciente
@@ -155,3 +156,4 @@ if __name__=='__main__':
     input('Mostrando as informações do consultório')
 
     #-- -- Testando o consultorio
+'''

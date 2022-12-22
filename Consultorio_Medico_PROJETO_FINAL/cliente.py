@@ -14,15 +14,6 @@ def clearConsole():
         command = 'cls'
     os.system(command)
 
-def translateCPF(cpf:str)->str:
-    '''Este método serve para transforma o CPF contendo sinais e transforma em uma cadeia de números'''
-        
-    if len(cpf)>11: # Se for acima de 11 caractéres, removerá os pontos e hífens. 
-        cpf=cpf.replace('-','')
-        cpf=cpf.replace('.','')
-    elif len(cpf) != 11:
-        raise TerminalException(3,'WRONG CPF ENTRY')
-    return cpf
 
 #== ==Referente a execução das escolhas do usuário
 
@@ -182,28 +173,36 @@ def ConsultoryBash():
 
             elif comand[0]=='DISPATCH':
                 '''Example> DISPATCH [YYY.YYY.YYY-XX]'''
-                patientCPF= comand[1]#o segundo método deve ser um CPF válido
-                patient=ReceptionRoom.despacharPaciente(patientCPF)
+                patient=ReceptionRoom.despacharPaciente(comand[1]) # despachar retornar uma cadeia de caracteres
                 comand[1]=patient
-                print(comand)
-                print(patient)# aqui. deve-se enviar o paciente para o consultório
+                #print(comand)
                 ServerConection(' '.join(comand))
 
             
             elif comand[0]=='DISPATCHALL':
                 '''Example> DISPATCHALL'''
                 patients=ReceptionRoom.despacharTodosPacientes()
-                comand.append(patients)
+                comand.append(patients) #adiciona no final do comando uma lista contendo todos os pacientes
                 print(comand)
                 ServerConection(' '.join(comand))# aqui. deve-se enviar todos os pacientes para o consultório
+            
+            elif comand[0]=='REMOVEPATIENT':
+                '''EXAMPLE> REMOVEPATIENT [YYY.YYY.YYY-XX]'''
+                comand[1]=ReceptionRoom.translateCPF(comand[1]) # Ele irá transforma um cpf, em uma cadeia de dígitos
+                ServerConection(' '.join(comand))
+            
+            else:
+                raise TerminalException(1, f"SORRY, I DON'T RECOGNIZE THIS: {comand}")
         
         except ReceptionException as RE:
             print(RE)
+        except TerminalException as TE:
+            print(TE)
         except KeyboardInterrupt:
             clearConsole()
             break
         except IndexError:
-            raise TerminalException(1, f"SORRY, I DON'T RECOGNIZE THIS: {comand}")
+            print(1, f"SORRY, I DON'T RECOGNIZE THIS: {comand}")
 
 #== == == ==Variáveis
 #== == Dicionarío com as escolhas
@@ -249,8 +248,8 @@ ReceptionRoom.ListarPaciente("34823019705","Joaseiro da Costa","Pediatria","L2")
 ReceptionRoom.ListarPaciente("56567424223","Pedro Neto SIlveira","Psiquiatria","G")
 ReceptionRoom.ListarPaciente("123.413.133-23","Rogerio SIlveira","Pediatria","M2")
 ReceptionRoom.ListarPaciente("123.413.133-01","Paulo Florinopolis","Pediatria","G")
-ReceptionRoom.ListarPaciente("153.783.108-20","Paulo Cantando","Pediatria","G")
-ReceptionRoom.ListarPaciente("123.413.138-34","Paulo lanchando","Pediatria","L1")
+ReceptionRoom.ListarPaciente("153.783.108-20","Paulo Cantando","Otorrinolaringologia","G")
+ReceptionRoom.ListarPaciente("123.413.138-34","Paulo lanchando","Otorrinolaringologia","L1")
 ReceptionRoom.ListarPaciente("123.913.188-53","Paulo bebendo","Pediatria","L1")
 ReceptionRoom.ListarPaciente("123.413.138-72","Paula Sorrino","Pediatria","L1")
 ReceptionRoom.ListarPaciente("123.413.166-51","Paulo Subindo","Psiquiatria","G")
