@@ -12,7 +12,7 @@ class Especialidade:
 
     def __str__(self) -> str:
         #s=f'Especialidade Médica:{self.__nomeclatura}\nLista de espera:\n{self.__listaEspera.__str__()}'
-        s=f'{self.__nomeclatura}\n'
+        s=f'{self.__nomeclatura}\n Patients: {self.__listaEspera}\n'
         return s
     
     @property

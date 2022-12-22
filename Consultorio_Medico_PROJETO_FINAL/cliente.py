@@ -174,9 +174,9 @@ def ConsultoryBash():
             elif comand[0]=='INFORM':
                 '''Example> 
                 INFORM ?[CLINIC], 
-                INFORM [PATIENT] {YYY.YYY.YYY-XX}, 
-                INFORM MEDIC {ENROLLMENT}
-                INFORM [SPECIALITY] {NOMECLATURE}
+                INFORM [PATIENTS], 
+                INFORM MEDICS,
+                INFORM [SPECIALITYS]
                 '''
                 ServerConection(' '.join(comand))
 
@@ -211,11 +211,11 @@ ConsultoryManuDict={
     'HOWISME': '[HOWISME] |USE TO GET THE INFORMATION OF HOW IS THE RECEPTION ROOM|',
     'MANU': '[MANU] |USE TO GET THE INFORMATION OF THE COMANDS|',
     
-    'INFORM':'[INFORM] [[SPECIALITY] [SPECIALITY.NAME]], [[MEDIC] [MEDIC.NAME]], [[PATIENT], [PATIENT.CPF]], DEFAULT=[CLINIC]" |USE TO GET INFORMATION OF THE CONSULTORY|',
+    'INFORM':'[INFORM] && [[SPECIALITYS] || [MEDICS] || [PATIENTS] || [CLINIC]=DEFAULT" |USE TO GET INFORMATION OF THE CONSULTORY|',
     
-    'DISPATCH':'[DISPATCH] [PATIENT.CPF] |USE TO SEND ONE PATIENT OF THE AWAITING LIST TO THE CONSULTORY|',
+    'DISPATCH':'[DISPATCH] &&[PATIENT.CPF] |USE TO SEND ONE PATIENT OF THE AWAITING LIST TO THE CONSULTORY|',
     'DISPATCHALL':'[DISPATCHALL] |USE TO SEND ALL PATIENTS ON THE AWAITHING LIST TO THE CONSULTORY|',
-    'REMOVEPATIENT':'[REMOVEPATIENT] [PATIENT.CPF] |USE TO REMOVE ONE PATIENT OF THE CLINIC|',
+    'REMOVEPATIENT':'[REMOVEPATIENT] && [PATIENT.CPF] |USE TO REMOVE ONE PATIENT OF THE CLINIC|',
     
     'QUIT': '[QUIT] |USE FOR QUIT OF THE CONSULTORY PROMPT|',
 }
@@ -257,27 +257,36 @@ ReceptionRoom.ListarPaciente("123.413.166-51","Paulo Subindo","Psiquiatria","G")
 ReceptionRoom.ListarPaciente("123.415.123-03","Paulo Chorando","Pediatria","G")
 ReceptionRoom.ListarPaciente("123.243.133-56","Paula Equinó","Pediatria","L1")
 
-#== == == SOCKET
-HOST = 'localhost'
-PORT = 5000
-conect = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-dest = (HOST, PORT)
 #== == == Varíavel qualquer
 separador='=='*30
 separador1='=-'*15
 separador2='-='*15
 cursor='\ntype =>  '
 
-def ServerConection(msg):
-    global dest, conect
-    msg=f'{msg}'
-    conect.sendto(msg.encode(),dest )
-    msg= conect.recvfrom(8092)
-    mensagem=f'{msg}'
+
+def ServerConection(msg:str):
+    #== == == SOCKET
+    HOST = 'localhost'
+    PORT = 5000
+    conect = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    dest = (HOST, PORT)
     
-    print(f"{'==='*30 :^20}")
-    print(mensagem)
-    print(f"{'==='*30 :^20}")
+    conect.sendto(msg.encode(),dest)
+    response= conect.recvfrom(8092)
+    
+    if msg.split()[0]=='INFORM':
+        arq=open('INFORM.txt','wb')
+        tam_arquivo = len(response)
+        while True:
+            arq.write(response[0])
+            tam_arquivo-= len(response)
+            if tam_arquivo==0:break      
+        arq.close()
+                
+    else:
+        print(f"{'==='*30 :^20}")
+        print(response)
+        print(f"{'==='*30 :^20}")
 
 flag=True
 while flag:
@@ -292,4 +301,4 @@ while flag:
         #-- -- -- Reception Page option
                     
     except TerminalException as ME:
-        print(ME)
+        print(ME) 

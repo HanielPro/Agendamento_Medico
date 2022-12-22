@@ -1,0 +1,14 @@
+ |  | matrícula: ALFIKFPWGA|  nome:ALFANDEGARIO NOBREGA| especialide: PSIQUIATRIA| consultas sequenciais: 20 | 
+==========================================================================================
+ |  | matrícula: ANTIJEWDES|  nome:ANTONY NUNES| especialide: PEDIATRIA| consultas sequenciais: 22 | 
+==========================================================================================
+ |  | matrícula: FRASKMJDON|  nome:FRANCIS BACON| especialide: PEDIATRIA| consultas sequenciais: 28 | 
+==========================================================================================
+ |  | matrícula: GUSOCBXMER|  nome:GUSTAVO WAGNER| especialide: OTORRINOLARINGOLOGIA| consultas sequenciais: 24 | 
+==========================================================================================
+ |  | matrícula: JAIISLOWRO|  nome:JAIR MESSIAS BOLSONARO| especialide: PSIQUIATRIA| consultas sequenciais: 24 | 
+==========================================================================================
+ |  | matrícula: LUIDTATCES|  nome:LUIZ CHAVES| especialide: PEDIATRIA| consultas sequenciais: 19 | 
+==========================================================================================
+ |  | matrícula: LUIFVYCQLA|  nome:LUÍS INÁCIO LULA| especialide: ENDOCRINOLOGIA| consultas sequenciais: 15 | 
+==========================================================================================

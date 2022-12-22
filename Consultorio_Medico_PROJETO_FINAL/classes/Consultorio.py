@@ -69,7 +69,9 @@ class Consultorio:
             self.__Especialidades.remover(posicao)
         except ListException as LE:
             raise ClinicException(0,LE)
-         
+    
+
+    
     def captarEspecialidade(self,key:any)->Especialidade:# Retorna uma especialidade  contida na Lista de especialidades
         try:
             posicao=self.__Especialidades.busca(key)
@@ -77,6 +79,12 @@ class Consultorio:
         except ListException as LE:
             raise ClinicException(0,LE)
         
+    def exibirEspecialidades(self)->bool: #Confere se existe uma determinada especialidade no hospital             
+        s=''
+        s+=f'{("==="*15 +"Especialidades" + "==="*15):^30}\n'
+        s+=str(self.__Especialidades)
+        s+='\n'
+        return s
     #== == == -- Métodos relacionados ao Médico    
     def inserirMedico(self, nome:str,especialidadeMedica:str)->None: #== == Adiciona um novo médico a Árvore de médicos
         try:

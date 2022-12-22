@@ -1,0 +1,56 @@
+=============================================Pacientes=============================================
+Empty
+=============================================Medicos=============================================
+ |  | matrícula: ALFYWUWDGA|  nome:ALFANDEGARIO NOBREGA| especialide: PSIQUIATRIA| consultas sequenciais: 22 | 
+==========================================================================================
+ |  | matrícula: ANTFUQOLES|  nome:ANTONY NUNES| especialide: PEDIATRIA| consultas sequenciais: 29 | 
+==========================================================================================
+ |  | matrícula: FRACDFVOON|  nome:FRANCIS BACON| especialide: PEDIATRIA| consultas sequenciais: 29 | 
+==========================================================================================
+ |  | matrícula: GUSSMWAHER|  nome:GUSTAVO WAGNER| especialide: OTORRINOLARINGOLOGIA| consultas sequenciais: 27 | 
+==========================================================================================
+ |  | matrícula: JAIQVIQCRO|  nome:JAIR MESSIAS BOLSONARO| especialide: PSIQUIATRIA| consultas sequenciais: 28 | 
+==========================================================================================
+ |  | matrícula: LUICQEGELA|  nome:LUÍS INÁCIO LULA| especialide: ENDOCRINOLOGIA| consultas sequenciais: 22 | 
+==========================================================================================
+ |  | matrícula: LUIVFNWUES|  nome:LUIZ CHAVES| especialide: PEDIATRIA| consultas sequenciais: 20 | 
+==========================================================================================
+
+=============================================Especialidades=============================================
+Quantidade: 7
+1|ENDOCRINOLOGIA
+ Patients: Quantidade: 0
+
+
+==========================================================================================
+2|OTORRINOLARINGOLOGIA
+ Patients: Quantidade: 0
+
+
+==========================================================================================
+3|CIRURGIA GERAL
+ Patients: Quantidade: 0
+
+
+==========================================================================================
+4|PSIQUIATRIA
+ Patients: Quantidade: 0
+
+
+==========================================================================================
+5|OFTALMOLOGIA
+ Patients: Quantidade: 0
+
+
+==========================================================================================
+6|PEDIATRIA
+ Patients: Quantidade: 0
+
+
+==========================================================================================
+7|CLINICA GERAL
+ Patients: Quantidade: 0
+
+
+==========================================================================================
+

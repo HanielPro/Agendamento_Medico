@@ -1,5 +1,7 @@
 from classes.Consultorio import Consultorio, ClinicException
 import socket
+#import os
+import struct
 #from threading import Thread, Semaphore
 
 class ServerException(Exception):
@@ -28,29 +30,14 @@ def ExecMessage(msg:str,cliente:str):
         
         if method==1:
             
-            if len(msgTrunc)==1 or len(msgTrunc)==2:
-                response=inform('CLINIC',cliente)
-                    
-            elif len(msgTrunc)==3:
-                if msgTrunc[1]=='SPECIALITY':
-                    response=inform('SPECIALITY',msgTrunc[2])
-                    #serverConection.sendto(response.encode(),cliente)
-                    #return response
-            
-                elif msgTrunc[1]=='MEDIC':
-                    response=inform('MEDIC',msgTrunc[2])
-                    #serverConection.sendto(response.encode(),cliente)
-                    #return response
+            if method==1: #INFORM( CLINIC,PATIENTS, SPECIALITYS, MEDICS.)
                 
-                elif msgTrunc[1]=='PATIENT':
-                    response=inform('PATIENT',msgTrunc[2])
-                    #serverConection.sendto(response.encode(),cliente)
-                    #return response
-      
-            else:
-                raise ServerException(1,'DID YOU KNOW HOW WRITE THE COMAND?')
-        
-        elif method==2:
+                if len(msgTrunc)==1: #só o método inform
+                    response=inform('CLINIC')
+                else:
+                    response=inform(msgTrunc[1])
+                    
+        elif method==2: #Dispatch [CPF/NAME#SUBNAME/SPECIALITY/GRAVITY]
             patient=msgTrunc[1].split('/')
             response= dispatch(patient)
         
@@ -62,34 +49,46 @@ def ExecMessage(msg:str,cliente:str):
             response= removePatient(msgTrunc[1]) 
         
         serverConection.sendto(response.encode(),cliente)
+        if method =='INFORM':
+            return 'FILE SENT'
         return response
         
     except KeyError as KE:
         raise ServerException(0,'METHOD NOT FOUND')
     
-def inform(type:str,key:str=None):
+def inform(type:str):
     '''O MÉTODO RETORNA AS INFORMAÇÕES DEPENDENDO DA EXIGÊNCIA DO USUÁRIO
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
-    [METHOD] ?[WHOM] ?[KEY]
+    [METHOD] ?[WHOM]
     '''
     try:
+        arquivo= open(f'inform{type}.txt','w')
         if type=='CLINIC':
-            return str(consultorio)
-        
-        elif key==None:
-            raise ServerException(1,'DID YOU KNOW HOW WRITE THE COMAND?')
+            arquivo.write(str(consultorio))
             
-        elif type=='SPECIALITY':
-            return str(consultorio.captarEspecialidade(key))
+        elif type=='SPECIALITYS':
+            arquivo.write(str(consultorio.exibirEspecialidades()))
         
-        elif type=='MEDIC':
-            return str(consultorio.ConsultarMedico(key))
+        elif type=='MEDICS':
+            arquivo.write(str(consultorio.exibirMedicos()))
         
-        elif type=='PATIENT':
-            return str(consultorio.ConsultarPaciente(key))
+        elif type=='PATIENTS':
+            arquivo.write(str(consultorio.exibirPacientes()))
+        else:
+            raise ServerException(2,f'-ERR THIS NOT THE RIGHT COMAND' )
+        arquivo.close()
+        dados_upload = ''
+
+        arq=open(f'inform{type}.txt','r')
+        for data in arq.readlines():
+            dados_upload+=data
+               
+        arquivo.close()
+        
+        return dados_upload
 
     except ClinicException as CE:
-        raise ServerException(2,f'The clinic sayed: \n {CE}' )
+        raise ServerException(2,f'-ERR THE CLINIC SAYED: \n {CE}' )
 
 def dispatch(patient)->str:
     '''O MÉTODO INSERE UM PACIENTE NO CONSULTORIO 

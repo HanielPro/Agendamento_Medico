@@ -29,7 +29,7 @@ class Lista:
 
     
     def __str__(self)->str:
-        s=f'{ "+++" * 30 }\nQuantidade: {self.__NodeLeader.quantyNodes}\n'
+        s=f'Quantidade: {self.__NodeLeader.quantyNodes}\n'
         for i in range(self.__NodeLeader.quantyNodes): #não queria usar uma repetição, mas fiquei com preguiça :(
             s+= f'{i+1}|{self.elemento(i+1)}\n{ "===" * 30 }\n'
         return s
