@@ -1,1 +1,0 @@
-('Server Exception 2: \n', '-ERR THIS NOT THE RIGHT COMAND')

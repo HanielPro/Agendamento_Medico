@@ -2,7 +2,6 @@ Funcionamento Dos Métodos do protocolo criado, Parâmetros , Resposta , Mensage
 
 // CLIENTE //
 
-
  // PrincipalDict : Nos dá acesso ao Prompt principal, onde podemos escolher o caminho para qual prompt desejamos // 
  
  '1': 'RECEPTION MENU' : Garante acesso á recepcão 
@@ -13,33 +12,39 @@ Funcionamento Dos Métodos do protocolo criado, Parâmetros , Resposta , Mensage
 
 "HOWISME" : O comando vai informar em qual sala de recepçao o cliente está situado, passando (ReceptionRoom) como parâmetro.
 
+Exemplo de Uso no  Bash:
+$=>[HOWISME]
 
 "MANU" : Retorna o dicionário de comandos de comandos que podem ser ultilizados no bash, Chamando a função: MostrarDicionario()
 Que por sua vez passa (ConsultoryManuDict) e (ConsultoryManuKeys) como parâmetros.
 
-"INFORM" : Após ser chamado, o "INFORM" ultiliza da função "ServerConection()" e ser ultilizado sozinho para ver informações gerais do consultório,
-ou passar parâmetros que fornecem as informações especificas abaixo:
+Exemplo de Uso no  Bash:
+$=>[MANU]
 
+"INFORM" : O cliente utiliza este método para receber um arquivo de texto contendo informações do consultório, este comando pode receber nennhum ou um parâmetro, que é especificado abaixo:
 // PARÂMETROS DE INFORM //
 
-"INFORM SPECIALITYS" Retorna as especialidades disponíveis.
+"[INFORM] SPECIALITYS" Retorna as especialidades disponíveis.
 
-"INFORM MEDICS" Informa os medicos disponíveis no momento.
+"[INFORM] MEDICS" Informa os medicos disponíveis no momento.
 
-"INFORM PACIENTS" Retorna as informações dos pacientes na lista de espera.
+"[INFORM ] PACIENTS" Retorna as informações dos pacientes na lista de espera.
 
-"INFORM CLINIC" Default Para retornar informações gerais.
-
-// PARÂMETROS DE INFORM //
+"[INFORM] CLINIC" Default Para retornar informações gerais.
+[INFORM] sem nenhum parametro, é o mesmo que [INFORM] CLINIC
 
 
 "DISPATCH" : Recebe numéro do cpf do paciente como parâmetro, e tem como função remover o paciente da lista de espera, o jogando direto ao consultório.
 
+Exemplo de Uso no  Bash:
+$=>[DISPATCH] |xxx.xxx.xxx-yy|
 "DISPATCHALL" : Manda todos os pacientes da lista de espera direto ao consultório.
 
-"DISPATCHALL" : Recebe o número de cpf do paciente como parâmetro , é responsável por remove-lo da clínica.
+Exemplo de Uso no  Bash:
+$=>[DISPATCHALL]
 
 "QUIT" : Ultilizado para sair do Prompt de Consultório.
+[QUIT]
 
 PS : Qualquer comando não disponível retornará a mensagem: "SORRY, I DON'T RECOGNIZE THIS" juntamente a mensagem de erro.
 
@@ -51,9 +56,7 @@ PS : Qualquer comando não disponível retornará a mensagem: "SORRY, I DON'T RE
 '4':'REMOVE ALL PATIENT OF THE AWAITING LIST', (Remover todos os pcientes da lista de espera)
 '5':'SHOW A PATIENT', (Mostrar um unico paciente)
 
-
 // SERVIDOR //  
-
  
 // MethodsServerDict : Comando que nos dá acesso ao bash principal retornando os comandos que podem ser ultilizados // 
 
@@ -84,10 +87,6 @@ ERRO: Caso ocorrar algum erro a clínica retona a mensagem 'The clinic sayed: CE
 "FIREMEDIC": Remove um Medico do consultório
     
 "NEWSPECIALITY": Adiciona uma nova Especialidade ao consultório
-
-
-
-
  
  
 

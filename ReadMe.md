@@ -62,8 +62,8 @@ O consultório será o servidor. Nele há diferentes especialidades médicas, es
 - [x] Discutir a respeito de prioridades
 - [x] Discutir a respeito da zona crítica
 - [x] Adicionar as Threads
-- [ ] Checar se as Threads estão executando corretamente
+- [x] Checar se as Threads estão executando corretamente
 - [x] Adicionado prioridades
 - [x] Checar se as Prioridades está funcionando estão executa ndo corretamente
 - [x] Adicionar a Exclussão Mútua
-- [ ] Checar se a Exclussão Mútua está funcionando estão executa ndo corretamente
+- [x] Checar se a Exclussão Mútua está funcionando estão executa ndo corretamente
