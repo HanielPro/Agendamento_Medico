@@ -1,19 +1,6 @@
 from classes.SalaRecepcao import SalaRecepcao, ReceptionException
 import socket
-import os 
-
-def MostrarDicionario(dicionario:dict,dictionaryKeys):
-    '''Recebe um dicionário e um array com chaves para poder mostrar na tela as chaves e os seus valores'''
-    for i in range(len(dictionaryKeys)):
-        print(f'\n[{dictionaryKeys[i]:^10}] => {dicionario.get(dictionaryKeys[i]):^10}')
-
-def clearConsole():
-    '''Comando para Limpar o terminal'''
-    command = 'clear'
-    if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
-        command = 'cls'
-    os.system(command)
-
+from functions.tools import *
 #== ==Referente a execução das escolhas do usuário
 
 #== Caso o usuário Digite uma escolha indevida
@@ -116,7 +103,7 @@ def PrincipalPage()->bool:
                 print(f'{separador1}Reception Page{separador2}')
                 print(separador)
                 
-                MostrarDicionario(ReceptionDict,ReceptionDictKeys)
+                mostrarDicionario(ReceptionDict)
                 receptionFlag=ReceptionPage(input(cursor))
                 if receptionFlag==True:
                     input(f'\n {separador1} Press Enter {separador2}\n')
@@ -134,7 +121,7 @@ def PrincipalPage()->bool:
             print(f'{separador1}Consultory Manual{separador2}')
             print(separador)
 
-            MostrarDicionario(ConsultoryManuDict,ConsultoryManuKeys)
+            mostrarDicionario(ConsultoryManuDict)
             input(cursor)
             clearConsole()
              
@@ -159,7 +146,7 @@ def ConsultoryBash():
             
             elif comand[0]=='MANU':
                 '''Example> MANU'''
-                MostrarDicionario(ConsultoryManuDict,ConsultoryManuKeys)
+                mostrarDicionario(ConsultoryManuDict)
             
             elif comand[0]=='INFORM':
                 '''Example> 
@@ -217,7 +204,6 @@ ConsultoryManuDict={
     
     'QUIT': '[QUIT] |USE FOR QUIT OF THE CONSULTORY PROMPT|',
 }
-ConsultoryManuKeys= list(ConsultoryManuDict.keys())
 
 PrincipalDict={
     '1': 'RECEPTION MENU',
@@ -225,7 +211,6 @@ PrincipalDict={
     '3':'CONSULTORY BASH MANU',
     '-':'..',
 }
-PrincipalDictKeys= list(PrincipalDict.keys())
 
 ReceptionDict={
     '1': 'SHOW THE AWAITING LIST',
@@ -235,7 +220,6 @@ ReceptionDict={
     '5':'SHOW A PATIENT',
     '-':'..',
 }
-ReceptionDictKeys= list(ReceptionDict.keys())
 
 #== == == == inicialização do lado do cliente
 #== == ==Classe Sala Recepção
@@ -287,13 +271,14 @@ def ServerConection(msg:str):
         print(f"{'==='*30 :^20}")
 
 flag=True
-HOST=input('Digite o IP: ')
+HOST=str.upper(input('Digite o IP: '))
+
 while flag:
     #-- -- -- ao logar ou sair de um dos menus, o usuário irá para a página Principal
     try:
         print(f'{separador1}Principal Page{separador2}')
         print(separador)
-        MostrarDicionario(PrincipalDict,PrincipalDictKeys)
+        mostrarDicionario(PrincipalDict)
         
         flag=PrincipalPage()
 

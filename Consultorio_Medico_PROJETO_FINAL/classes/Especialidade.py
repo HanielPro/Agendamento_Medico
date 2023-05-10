@@ -57,7 +57,7 @@ class Especialidade:
         return self.__checarPosicaoPorGravidade(paciente, posicaoAtual + 1) # caso a prioridade do paciente seja igual ou menor que o tal, ele irá tentar inserir depois deste.
 
 
-    def RemoverPaciente(self,key): #Método que remove um paciente na lista de espera
+    def RemoverPaciente(self,key:str): #Método que remove um paciente na lista de espera
         '''Remove um paciente da lista de espera'''
         
         if len(self.__listaEspera)==0:
@@ -104,4 +104,4 @@ class Especialidade:
             self.quantyPacientes.acquire()#ele retorna a quantidade de paciente para o antigo estado
             
             print(LE)
-            return '-ERR Key not found'
+            return '-ERR Key not found' # type: ignore

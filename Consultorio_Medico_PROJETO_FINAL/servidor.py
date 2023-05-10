@@ -1,4 +1,5 @@
-from classes.Consultorio import Consultorio, ClinicException
+from classes.Hospital import Hospital, HospitalException
+
 import socket
 #import os
 #from threading import Thread, Semaphore
@@ -9,7 +10,7 @@ class ServerException(Exception):
         '''
         0: Método não encontrado.
         1: O cliente escreveu o método certo, mas não inseriu os parametros adequado
-        2: Ocorreu algum erro dentro do consultorio
+        2: Ocorreu algum erro dentro do Hospital
         '''
         super().__init__(f'Server Exception {code}: \n', msg)
         
@@ -73,16 +74,16 @@ def inform(type:str):
             raise ServerException(2,f'-ERR THIS NOT THE RIGHT COMAND' )
         
         if type=='CLINIC':
-            arquivo.write(str(consultorio))
+            arquivo.write(str(Hospital))
             
         elif type=='SPECIALITYS':
-            arquivo.write(str(consultorio.exibirEspecialidades()))
+            arquivo.write(str(Hospital.exibirEspecialidades()))
         
         elif type=='MEDICS':
-            arquivo.write(str(consultorio.exibirMedicos()))
+            arquivo.write(str(Hospital.exibirMedicos()))
         
         elif type=='PATIENTS':
-            arquivo.write(str(consultorio.exibirPacientes()))
+            arquivo.write(str(Hospital.exibirPacientes()))
 
         arquivo.close()
         dados_upload = ''
@@ -95,11 +96,11 @@ def inform(type:str):
         
         return dados_upload
     
-    except ClinicException as CE:
-        raise ServerException(2,f'-ERR THE CLINIC SAYED: \n {CE}' )
+    except HospitalException as HE:
+        raise ServerException(2,f'-ERR THE CLINIC SAYED: \n {HE}' )
 
 def dispatch(patient)->str:
-    '''O MÉTODO INSERE UM PACIENTE NO CONSULTORIO 
+    '''O MÉTODO INSERE UM PACIENTE NO Hospital 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [DISPATCH] [CPF/NOME COMPLETO/ESPECIALIDADE/GRAVIDADE]
     '''
@@ -107,13 +108,13 @@ def dispatch(patient)->str:
         nome=patient[1].split('#')
         nome=' '.join(nome)
         
-        return consultorio.inserirPaciente(patient[0],nome,patient[2],patient[3])
+        return Hospital.inserirPaciente(patient[0],nome,patient[2],patient[3])
         
-    except ClinicException as CE:
-        raise ServerException(2,'The clinic sayed: ',CE)
+    except HospitalException as HE:
+        raise ServerException(2,'The clinic sayed: ',HE)
         
 def dispatchAll(pacientes):
-    '''O MÉTODO INSERE VÁRIOS PACIENTES NO CONSULTORIO 
+    '''O MÉTODO INSERE VÁRIOS PACIENTES NO Hospital 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [DISPATCHALL] [LISTA[CPF/NOME COMPLETO/ESPECIALIDADE/GRAVIDADE]]
     ''' 
@@ -125,22 +126,22 @@ def dispatchAll(pacientes):
             nome=patient[1].split('#')
             nome=' '.join(nome)
             
-            consultorio.inserirPaciente(patient[0],nome,patient[2],patient[3])
+            Hospital.inserirPaciente(patient[0],nome,patient[2],patient[3])
         return '+Ok, all dispatched!'
         
-    except ClinicException as CE:
-        raise ServerException(2,'The clinic sayed: ',CE)
+    except HospitalException as HE:
+        raise ServerException(2,'The clinic sayed: ',HE)
 
 def removePatient(cpf):
-    '''O MÉTODO REMOVE UM PACIENTE DO CONSULTORIO 
+    '''O MÉTODO REMOVE UM PACIENTE DO Hospital 
     \nO QUE SE ESPERA RECEBER DA MENSAGEM:
     [REMOVEPATIENT] [CPF]
     '''
     try:
-        return consultorio.removerPaciente(cpf)
+        return Hospital.removerPaciente(cpf)
     
-    except ClinicException as CE:
-        raise ServerException(2,'The clinic sayed: ',CE)
+    except HospitalException as HE:
+        raise ServerException(2,'The clinic sayed: ',HE)
     
 #== == == == Variáveis
 MethodsServerDict={
@@ -148,7 +149,7 @@ MethodsServerDict={
     
     'DISPATCH':2, #Adiciona um novo paciente ao consultório
     'DISPATCHALL':3, #Adiciona todos os pacientes 
-    'REMOVEPATIENT':4, #Remove um paciente do consultorio
+    'REMOVEPATIENT':4, #Remove um paciente do Hospital
     
     'HIREMEDIC':5, #Adiciona um novo Medico ao consultório
     'FIREMEDIC':6, #Remove um Medico do consultório
@@ -157,23 +158,23 @@ MethodsServerDict={
 }
 
 #== == == Objetos
-consultorio= Consultorio() # objeto do consultório
-consultorio.inserirEspecilidade('Geral')
-consultorio.inserirEspecilidade('Pediatria')
-consultorio.inserirEspecilidade('Oftamologia')
-consultorio.inserirEspecilidade('Psiquiatria')
-consultorio.inserirEspecilidade('Cirurgia')
-consultorio.inserirEspecilidade('Otorrinolaringologia')
-consultorio.inserirEspecilidade('Endocrinologia')
+Hospital= Hospital() # objeto do consultório
+Hospital.inserirEspecilidade('Geral')
+Hospital.inserirEspecilidade('Pediatria')
+Hospital.inserirEspecilidade('Oftamologia')
+Hospital.inserirEspecilidade('Psiquiatria')
+Hospital.inserirEspecilidade('Cirurgia')
+Hospital.inserirEspecilidade('Otorrinolaringologia')
+Hospital.inserirEspecilidade('Endocrinologia')
 
-consultorio.inserirMedico("Francis Bacon","Pediatria")
-consultorio.inserirMedico("Alfandegario Nobrega","Psiquiatria")
-consultorio.inserirMedico("Antony Nunes","Pediatria")
-consultorio.inserirMedico("Luiz Chaves","Pediatria")
-consultorio.inserirMedico("JOÃO MACHADO","OFTAMOLOGIA")
-consultorio.inserirMedico("Jair Messias Bolsonaro","Psiquiatria")
-consultorio.inserirMedico("Luís Inácio Lula","Endocrinologia")
-consultorio.inserirMedico("Gustavo Wagner","Otorrinolaringologia")
+Hospital.inserirMedico("Francis Bacon","Pediatria")
+Hospital.inserirMedico("Alfandegario Nobrega","Psiquiatria")
+Hospital.inserirMedico("Antony Nunes","Pediatria")
+Hospital.inserirMedico("Luiz Chaves","Pediatria")
+Hospital.inserirMedico("JOÃO MACHADO","OFTAMOLOGIA")
+Hospital.inserirMedico("Jair Messias Bolsonaro","Psiquiatria")
+Hospital.inserirMedico("Luís Inácio Lula","Endocrinologia")
+Hospital.inserirMedico("Gustavo Wagner","Otorrinolaringologia")
 
 #== == == Socket Parte
 HOST = '0.0.0.0' #o Host gerado automaticamente
